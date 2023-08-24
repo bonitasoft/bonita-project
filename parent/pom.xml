@@ -26,7 +26,8 @@
     <url>https://github.com/bonitasoft/bonita-project</url>
   </scm>
   <properties>
-    <maven.compiler.release>11</maven.compiler.release>
+    <java.version>11</java.version>
+    <maven.compiler.release>${java.version}</maven.compiler.release>
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
     <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
     <maven-failsafe-plugin.version>3.1.2</maven-failsafe-plugin.version>
