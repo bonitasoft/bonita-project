@@ -1,0 +1,30 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.2.0 https://maven.apache.org/xsd/assembly-2.2.0.xsd">
+    <id>bundle-tomcat</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <baseDirectory>${project.build.directory}/package-bundle-tomcat</baseDirectory>
+    <dependencySets>
+        <!-- Unpack Tomcat Bundle artifact -->
+        <dependencySet>
+            <unpack>true</unpack>
+            <includes>
+                <include>org.bonitasoft.distrib:bundle-tomcat</include>
+            </includes>
+        </dependencySet>
+        <!-- Copy application zip into bundle classpath -->
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <useProjectAttachments>true</useProjectAttachments>
+            <includes>
+                <include>${project.groupId}:${project.artifactId}:zip:${bonita.environment}</include>
+            </includes>
+            <outputDirectory>
+                BonitaCommunity-${branding.version}/server/webapps/bonita/WEB-INF/classes/my-application/
+            </outputDirectory>
+        </dependencySet>
+    </dependencySets>
+</assembly>
