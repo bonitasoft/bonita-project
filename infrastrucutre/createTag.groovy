@@ -18,9 +18,15 @@ pipeline {
         stage('Tag') {
             steps {
                 script {
-                    sh "./mvnw -ntp -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${params.TAG_NAME}"
-                    sh "./mvnw -ntp -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${params.NEW_BRANDING_VERSION}"
-                    sh "./infrastructure/release.sh ${params.TAG_NAME} true"
+                   	sh """
+						git checkout -B release/${params.TAG_NAME}
+						./mvnw -ntp versions:set -DnewVersion=${params.TAG_NAME}
+						./mvnw -ntp -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${params.TAG_NAME}
+						./mvnw -ntp -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${params.NEW_BRANDING_VERSION}
+						git commit -a -m "release(${params.TAG_NAME}) create release ${params.TAG_NAME}"
+					    git tag -a ${params.TAG_NAME} -m "Release ${params.TAG_NAME}"
+					    git push origin ${params.TAG_NAME}:${params.TAG_NAME}
+					"""
                 }
             }
         }
