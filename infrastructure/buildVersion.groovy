@@ -20,7 +20,7 @@ pipeline {
             }
             steps {
                 configFileProvider([configFile(fileId: 'maven-settings', variable: 'MAVEN_SETTINGS')]) {
-                    sh("./mvnw --no-transfer-progress -B deploy -Dgpg.passphrase=$GPG_PASSPHRASE -Prelease,ossrh")
+                    sh("./mvnw --no-transfer-progress -B deploy -Dgpg.passphrase=\$GPG_PASSPHRASE -Prelease,ossrh")
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
             }
             steps {
                 configFileProvider([configFile(fileId: 'maven-settings', variable: 'MAVEN_SETTINGS')]) {
-                    sh("./mvnw --no-transfer-progress -B deploy -Dgpg.passphrase=$GPG_PASSPHRASE -Prelease -DaltDeploymentRepository=${env.ALT_DEPLOYMENT_REPOSITORY_STAGING}")
+                    sh("./mvnw --no-transfer-progress -B deploy -Dgpg.passphrase=\$GPG_PASSPHRASE -Prelease -DaltDeploymentRepository=${env.ALT_DEPLOYMENT_REPOSITORY_STAGING}")
                 }
             }
         }

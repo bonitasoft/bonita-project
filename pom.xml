@@ -34,10 +34,6 @@
     <url>https://github.com/bonitasoft/bonita-project</url>
   </scm>
   <distributionManagement>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
     <!-- Central Repository -->
     <snapshotRepository>
       <id>ossrh</id>
@@ -248,6 +244,12 @@
     </profile>
     <profile>
       <id>ossrh</id>
+      <distributionManagement>
+        <repository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+      </distributionManagement>
       <build>
         <pluginManagement>
           <plugins>
