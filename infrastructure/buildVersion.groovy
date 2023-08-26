@@ -2,6 +2,8 @@ pipeline {
     agent any
     options {
         timestamps()
+        ansiColor('xterm')
+        buildDiscarder(logRotator(numToKeepStr: '5'))
     }
     environment {
       JAVA_TOOL_OPTIONS = ''
