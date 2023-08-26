@@ -10,6 +10,7 @@
   <packaging>pom</packaging>
   <name>Bonita Project Parent pom</name>
   <description>A parent pom used for Bonita Project.</description>
+  <url>https://www.bonitasoft.com</url>
   <developers>
     <developer>
       <id>bonitasoft</id>
@@ -26,6 +27,8 @@
     <url>https://github.com/bonitasoft/bonita-project</url>
   </scm>
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>11</java.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
@@ -43,13 +46,11 @@
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
     <build-helper-maven-plugin.version>3.4.0</build-helper-maven-plugin.version>
     <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
     <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
     <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
     <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
     <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
     <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
     <properties-maven-plugin.version>1.2.0</properties-maven-plugin.version>
@@ -125,7 +126,7 @@
           <artifactId>maven-resources-plugin</artifactId>
           <version>${maven-resources-plugin.version}</version>
           <configuration>
-            <propertiesEncoding>ISO-8859-1</propertiesEncoding>
+            <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
           </configuration>
         </plugin>
         <plugin>

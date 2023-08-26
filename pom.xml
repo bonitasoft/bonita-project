@@ -200,6 +200,7 @@
               <pomElements>
                 <parent>remove</parent>
               </pomElements>
+              <keepCommentsInPom>true</keepCommentsInPom>
             </configuration>
           </execution>
           <!-- ensure proper cleanup -->

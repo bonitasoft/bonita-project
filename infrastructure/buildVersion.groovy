@@ -8,6 +8,7 @@ pipeline {
       MAVEN_OPTS = '-Dstyle.color=always -Djansi.passthrough=true'
       GPG_PASSPHRASE = credentials('gpg-passphrase')
       BUILD_VERSION = sh(script: "./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+      JAVA_HOME = "${env.JAVA_HOME_11}"
     }
     stages {
         // Do not deploy weekly builds on Central

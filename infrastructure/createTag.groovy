@@ -6,6 +6,11 @@ pipeline {
         timestamps()
         skipDefaultCheckout true
     }
+    environment {
+        JAVA_TOOL_OPTIONS = ''
+        MAVEN_OPTS = '-Dstyle.color=always -Djansi.passthrough=true'
+        JAVA_HOME = "${env.JAVA_HOME_11}"
+    }
     stages {
         stage('Init') {
             steps{
