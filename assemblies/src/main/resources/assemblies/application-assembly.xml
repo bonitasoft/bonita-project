@@ -94,6 +94,11 @@
             <includes>
                 <include>*:zip</include>
             </includes>
+            <!-- Excludes bundle tomcat present in the bundle-tomcat profile-->
+            <excludes>
+                <exclude>org.bonitasoft.distrib:*:zip</exclude>
+                <exclude>com.bonitasoft.distrib:*:zip</exclude>
+            </excludes>
             <outputDirectory>extensions</outputDirectory>
         </dependencySet>
     </dependencySets>
