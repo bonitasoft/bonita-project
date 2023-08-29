@@ -196,6 +196,11 @@
               <artifactId>groovy</artifactId>
               <version>${groovy.version}</version>
             </dependency>
+              <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>bonita-project-assemblies</artifactId>
+                <version>${project.version}</version>
+              </dependency>
           </dependencies>
           <executions>
             <execution>
@@ -215,16 +220,32 @@
               <phase>generate-resources</phase>
               <configuration>
                 <source><![CDATA[
-                        def propsFile = new File("${project.build.directory}", "application.properties")
-                        propsFile.delete()
-                        propsFile.createNewFile()
-                        def applicationProperties = new Properties()
-                        applicationProperties.setProperty('version', project.version)
-                        propsFile.withWriter { out ->
-                          applicationProperties.each{ it ->
-                             out << it << System.lineSeparator()
-                          }
-                        }]]></source>
+                  def propsFile = new File("${project.build.directory}", "application.properties")
+                  propsFile.delete()
+                  propsFile.createNewFile()
+                  def applicationProperties = new Properties()
+                  applicationProperties.setProperty('version', project.version)
+                  propsFile.withWriter { out ->
+                    applicationProperties.each{ it ->
+                      out << it << System.lineSeparator()
+                    }
+                  }]]></source>
+              </configuration>
+            </execution>
+            <execution>
+              <id>generate-docker-resources</id>
+              <phase>generate-resources</phase>
+              <configuration>
+                <classpathScope>runtime</classpathScope>
+                <source><![CDATA[
+                  def dockerOutput = new File("${bonita.applicationOutput}")
+                  dockerOutput.mkdirs()
+                  def dockerResourcesDir = new File("docker")
+                  dockerResourcesDir.eachFile() { dockerResource ->
+                    def outputFile = new File(dockerOutput, dockerResource.getName())
+                    outputFile.bytes << dockerResource.bytes
+                  }
+                  ]]></source>
               </configuration>
             </execution>
           </executions>
