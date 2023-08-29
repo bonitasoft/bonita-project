@@ -66,7 +66,7 @@
     <!-- Docker properties -->
     <docker.baseImageName>bonita:${bonita.runtime.version}</docker.baseImageName>
     <docker.imageName>${project.artifactId:lowercase}-${bonita.environment:lowercase}:${project.version}</docker.imageName>
-    <docker.noCache>false</docker.noCache>
+    <docker.noCache>true</docker.noCache>
     <bonita.applicationOutput>${project.build.directory}/application-output</bonita.applicationOutput>
   </properties>
   <dependencyManagement>
@@ -196,11 +196,11 @@
               <artifactId>groovy</artifactId>
               <version>${groovy.version}</version>
             </dependency>
-              <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>bonita-project-assemblies</artifactId>
-                <version>${project.version}</version>
-              </dependency>
+            <dependency>
+              <groupId>org.bonitasoft</groupId>
+              <artifactId>bonita-project-assemblies</artifactId>
+              <version>${bonita.runtime.version}</version>
+            </dependency>
           </dependencies>
           <executions>
             <execution>
@@ -236,14 +236,18 @@
               <id>generate-docker-resources</id>
               <phase>generate-resources</phase>
               <configuration>
-                <classpathScope>runtime</classpathScope>
                 <source><![CDATA[
                   def dockerOutput = new File("${bonita.applicationOutput}")
                   dockerOutput.mkdirs()
-                  def dockerResourcesDir = new File("docker")
-                  dockerResourcesDir.eachFile() { dockerResource ->
-                    def outputFile = new File(dockerOutput, dockerResource.getName())
-                    outputFile.bytes << dockerResource.bytes
+                  
+                  // Copy resources from the bonita-project-assemblies resources jar
+                  def resourceList = ['Dockerfile', '.dockerignore']
+                  resourceList.each { name ->
+                      def file = new File(dockerOutput, name)
+                      file.createNewFile()
+                      def is = getClass().getResourceAsStream("/docker/$name")
+                      file.append(is)
+                      is.close()
                   }
                   ]]></source>
               </configuration>
@@ -261,18 +265,6 @@
             <id>validate-artifacts</id>
             <goals>
               <goal>validate</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.gmaven</groupId>
-        <artifactId>groovy-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>bonita-project-properties</id>
-            <goals>
-              <goal>execute</goal>
             </goals>
           </execution>
         </executions>
