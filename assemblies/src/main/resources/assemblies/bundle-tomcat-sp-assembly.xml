@@ -12,7 +12,7 @@
         <dependencySet>
             <unpack>true</unpack>
             <includes>
-                <include>org.bonitasoft.distrib:bundle-tomcat-sp</include>
+                <include>com.bonitasoft.distrib:bundle-tomcat-sp</include>
             </includes>
         </dependencySet>
         <!-- Copy application zip & bconf into bundle classpath -->
