@@ -40,7 +40,7 @@
     <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
     <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
     <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
-    <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
+    <gmavenplus-plugin.version>3.0.0</gmavenplus-plugin.version>
     <!-- Default inclusion filters -->
     <include.organizations>*.xml</include.organizations>
     <include.profiles>*.xml</include.profiles>
@@ -188,19 +188,32 @@
           </configuration>
         </plugin>
         <plugin>
-          <groupId>org.codehaus.gmaven</groupId>
-          <artifactId>groovy-maven-plugin</artifactId>
-          <version>${groovy-maven-plugin.version}</version>
+          <groupId>org.codehaus.gmavenplus</groupId>
+          <artifactId>gmavenplus-plugin</artifactId>
+          <version>${gmavenplus-plugin.version}</version>
+          <configuration>
+            <bindAllProjectProperties>true</bindAllProjectProperties>
+            <bindSessionUserOverrideProperties>true</bindSessionUserOverrideProperties>
+            <bindPropertiesToSeparateVariables>false</bindPropertiesToSeparateVariables>
+          </configuration>
           <dependencies>
             <dependency>
               <groupId>org.codehaus.groovy</groupId>
               <artifactId>groovy</artifactId>
               <version>${groovy.version}</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.codehaus.groovy</groupId>
+              <artifactId>groovy-ant</artifactId>
+              <version>${groovy.version}</version>
+              <scope>runtime</scope>
             </dependency>
             <dependency>
               <groupId>org.bonitasoft</groupId>
               <artifactId>bonita-project-assemblies</artifactId>
               <version>${bonita.runtime.version}</version>
+              <scope>runtime</scope>
             </dependency>
           </dependencies>
           <executions>
@@ -208,49 +221,59 @@
               <id>bonita-project-properties</id>
               <phase>initialize</phase>
               <configuration>
-                <source><![CDATA[
-                        def environment = "${bonita.environment}"
-                        lcBonitaEnv = environment == null ? 'local' : environment.toLowerCase()
-                        project.properties.setProperty('bonita.environment:lowercase', lcBonitaEnv)
-                        def artifactId = "${project.artifactId}"
-                        project.properties.setProperty('project.artifactId:lowercase', artifactId.toLowerCase())]]></source>
+                <scripts>
+                  <script><![CDATA[
+                    def project = properties.project
+                    def environment = properties.'bonita.environment'
+                    lcBonitaEnv = environment == null ? 'local' : environment.toLowerCase()
+                    project.properties.setProperty('bonita.environment:lowercase', lcBonitaEnv)
+                    project.properties.setProperty('project.artifactId:lowercase', project.artifactId.toLowerCase())
+                  ]]></script>
+                </scripts>
               </configuration>
             </execution>
             <execution>
               <id>generate-application-properties</id>
               <phase>generate-resources</phase>
               <configuration>
-                <source><![CDATA[
-                  def propsFile = new File("${project.build.directory}", "application.properties")
-                  propsFile.delete()
-                  propsFile.createNewFile()
-                  def applicationProperties = new Properties()
-                  applicationProperties.setProperty('version', project.version)
-                  propsFile.withWriter { out ->
-                    applicationProperties.each{ it ->
-                      out << it << System.lineSeparator()
+                <scripts>
+                  <script><![CDATA[
+                    def project = properties.project
+                    def propsFile = new File(project.build.directory, 'application.properties')
+                    propsFile.delete()
+                    propsFile.getParentFile().mkdirs()
+                    propsFile.createNewFile()
+                    def applicationProperties = new Properties()
+                    applicationProperties.setProperty('version', project.version)
+                    propsFile.withWriter { out ->
+                      applicationProperties.each { it ->
+                        out << it << System.lineSeparator()
+                      }
                     }
-                  }]]></source>
+                  ]]></script>
+                </scripts>
               </configuration>
             </execution>
             <execution>
               <id>generate-docker-resources</id>
               <phase>generate-resources</phase>
               <configuration>
-                <source><![CDATA[
-                  def dockerOutput = new File("${bonita.applicationOutput}")
-                  dockerOutput.mkdirs()
-                  
-                  // Copy resources from the bonita-project-assemblies resources jar
-                  def resourceList = ['Dockerfile', '.dockerignore']
-                  resourceList.each { name ->
+                <scripts>
+                  <script><![CDATA[
+                    def dockerOutput = new File(properties.'bonita.applicationOutput')
+                    dockerOutput.mkdirs()
+
+                    // Copy resources from the bonita-project-assemblies resources jar
+                    def resourceList = ['Dockerfile', '.dockerignore']
+                    resourceList.each { name ->
                       def file = new File(dockerOutput, name)
                       file.createNewFile()
                       def is = getClass().getResourceAsStream("/docker/$name")
                       file.append(is)
                       is.close()
-                  }
-                  ]]></source>
+                    }
+                  ]]></script>
+                </scripts>
               </configuration>
             </execution>
           </executions>
@@ -265,9 +288,9 @@
               <pluginExecutions>
                 <pluginExecution>
                   <pluginExecutionFilter>
-                    <groupId>org.codehaus.gmaven</groupId>
-                    <artifactId>groovy-maven-plugin</artifactId>
-                    <versionRange>[2.1.1,)</versionRange>
+                    <groupId>org.codehaus.gmavenplus</groupId>
+                    <artifactId>gmavenplus-plugin</artifactId>
+                    <versionRange>[${gmavenplus-plugin.version},)</versionRange>
                     <goals>
                       <goal>execute</goal>
                     </goals>
@@ -280,7 +303,7 @@
                   <pluginExecutionFilter>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <versionRange>[3.4.0,)</versionRange>
+                    <versionRange>[${build-helper-maven-plugin.version},)</versionRange>
                     <goals>
                       <goal>add-source</goal>
                     </goals>
