@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.bonitasoft</groupId>
+    <artifactId>bonita-project-parent</artifactId>
+    <version>9.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>bonita-project-tests</artifactId>
+  <name>Tests for Bonita Project</name>
+  <description>This module contains tests for Bonita Project</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.bonitasoft</groupId>
+      <artifactId>bonita-project</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+  </dependencies>
+  <build>
+    <testResources>
+      <!-- Used to inject current project.version into test POMs that require bonita-project as parent -->
+      <testResource>
+        <targetPath>${project.basedir}/src/it</targetPath>
+        <filtering>true</filtering>
+        <directory>src/test/resources</directory>
+      </testResource>
+    </testResources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-invoker-plugin</artifactId>
+        <configuration>
+          <skipInvocation>${skipTests}</skipInvocation>
+          <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+          <settingsFile>src/it/settings.xml</settingsFile>
+          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+          <postBuildHookScript>verify</postBuildHookScript>
+        </configuration>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>install</goal>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
