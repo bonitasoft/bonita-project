@@ -15,7 +15,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>11</java.version>
     <!-- Should match version in bonita-runtime-bom -->
-    <groovy.version>3.0.10</groovy.version>
+    <groovy.version>3.0.19</groovy.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
     <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
@@ -57,6 +57,12 @@
         <version>${bonita.runtime.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-all</artifactId>
+        <version>${groovy.version}</version>
+        <type>pom</type>
       </dependency>
     </dependencies>
   </dependencyManagement>
