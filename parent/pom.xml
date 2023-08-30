@@ -47,10 +47,6 @@
     <include.applications>*.xml</include.applications>
     <include.processes>*.bar</include.processes>
     <include.pages>*.zip</include.pages>
-    <!-- Docker properties -->
-    <docker.baseImageName>bonita:${bonita.runtime.version}</docker.baseImageName>
-    <docker.imageName>${project.artifactId:lowercase}-${bonita.environment:lowercase}:${project.version}</docker.imageName>
-    <docker.noCache>true</docker.noCache>
     <bonita.applicationOutput>${project.build.directory}/application-output</bonita.applicationOutput>
   </properties>
   <dependencyManagement>
@@ -97,6 +93,27 @@
               <version>${bonita.runtime.version}</version>
             </dependency>
           </dependencies>
+          <executions>
+            <execution>
+              <id>bdm-descriptor-archive</id>
+              <phase>package</phase>
+              <configuration>
+                <descriptorRefs>
+                  <descriptorRef>bdm-assembly</descriptorRef>
+                </descriptorRefs>
+              </configuration>
+            </execution>
+            <execution>
+              <id>application-archive</id>
+              <phase>package</phase>
+              <configuration>
+                <outputDirectory>${bonita.applicationOutput}</outputDirectory>
+                <descriptorRefs>
+                  <descriptorRef>application-assembly</descriptorRef>
+                </descriptorRefs>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -296,4 +313,73 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>bundle</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <artifactId>maven-assembly-plugin</artifactId>
+              <version>${maven-assembly-plugin.version}</version>
+              <executions>
+                <execution>
+                  <id>bundle-archive</id>
+                  <phase>package</phase>
+                  <configuration>
+                    <descriptorRefs>
+                      <descriptorRef>bundle-tomcat-assembly</descriptorRef>
+                    </descriptorRefs>
+                  </configuration>
+                </execution>
+                <execution>
+                  <id>bundle-archive-enterprise</id>
+                  <phase>package</phase>
+                  <configuration>
+                    <descriptorRefs>
+                      <descriptorRef>bundle-tomcat-sp-assembly</descriptorRef>
+                    </descriptorRefs>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+    <profile>
+      <id>docker</id>
+      <properties>
+        <docker.baseImageRepository>bonita</docker.baseImageRepository>
+        <docker.baseImageVersion>${bonita.runtime.version}</docker.baseImageVersion>
+        <docker.baseImage>${docker.baseImageRepository}:${docker.baseImageVersion}</docker.baseImage>
+        <docker.imageRepository>${project.artifactId:lowercase}-${bonita.environment:lowercase}</docker.imageRepository>
+        <docker.imageName>${docker.imageRepository}:${project.version}</docker.imageName>
+        <docker.noCache>true</docker.noCache>
+        <docker.buildArgs></docker.buildArgs>
+        <docker.buildArgLine>build "." --build-arg BONITA_BASE_IMAGE="${docker.baseImage}" ${docker.buildArgs} --no-cache="${docker.noCache}" --tag "${docker.imageName}"</docker.buildArgLine>
+      </properties>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>build-image</id>
+                  <phase>package</phase>
+                  <configuration>
+                    <workingDirectory>${bonita.applicationOutput}</workingDirectory>
+                    <executable>docker</executable>
+                    <commandlineArgs>${docker.buildArgLine}</commandlineArgs>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 </project>
