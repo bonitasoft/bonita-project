@@ -9,22 +9,6 @@
   <artifactId>bonita-project-assemblies</artifactId>
   <name>Bonita Project assemblies</name>
   <description>This module contains Bonita project specific assemblies</description>
-  <url>https://www.bonitasoft.com</url>
-  <developers>
-    <developer>
-      <id>bonitasoft</id>
-      <name>Bonitasoft</name>
-      <email>rd.user@bonitasoft.com</email>
-      <organization>Bonitasoft</organization>
-      <organizationUrl>https://www.bonitasoft.com</organizationUrl>
-    </developer>
-  </developers>
-  <scm>
-    <connection>scm:git:git@github.com:bonitasoft/bonita-project.git</connection>
-    <developerConnection>scm:git:git@github.com:bonitasoft/bonita-project.git</developerConnection>
-    <tag>HEAD</tag>
-    <url>https://github.com/bonitasoft/bonita-project</url>
-  </scm>
   <properties>
     <maven.compiler.release>11</maven.compiler.release>
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>

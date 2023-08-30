@@ -10,22 +10,6 @@
   <packaging>pom</packaging>
   <name>Bonita Project Parent pom</name>
   <description>A parent pom used for Bonita Project.</description>
-  <url>https://www.bonitasoft.com</url>
-  <developers>
-    <developer>
-      <id>bonitasoft</id>
-      <name>Bonitasoft</name>
-      <email>rd.user@bonitasoft.com</email>
-      <organization>Bonitasoft</organization>
-      <organizationUrl>https://www.bonitasoft.com</organizationUrl>
-    </developer>
-  </developers>
-  <scm>
-    <connection>scm:git:git@github.com:bonitasoft/bonita-project.git</connection>
-    <developerConnection>scm:git:git@github.com:bonitasoft/bonita-project.git</developerConnection>
-    <tag>HEAD</tag>
-    <url>https://github.com/bonitasoft/bonita-project</url>
-  </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
