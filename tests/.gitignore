@@ -1,0 +1,2 @@
+# Ignore POMs in src/it because there are generated from src/test/resources
+src/it/**/pom.xml
