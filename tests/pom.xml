@@ -18,14 +18,6 @@
     </dependency>
   </dependencies>
   <build>
-    <testResources>
-      <!-- Used to inject current project.version into test POMs that require bonita-project as parent -->
-      <testResource>
-        <targetPath>${project.basedir}/src/it</targetPath>
-        <filtering>true</filtering>
-        <directory>src/test/resources</directory>
-      </testResource>
-    </testResources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -35,7 +27,11 @@
           <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
           <settingsFile>src/it/settings.xml</settingsFile>
           <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+          <preBuildHookScript>setup</preBuildHookScript>
           <postBuildHookScript>verify</postBuildHookScript>
+          <scriptVariables>
+            <bonitaProjectVersion>${project.version}</bonitaProjectVersion>
+          </scriptVariables>
         </configuration>
         <executions>
           <execution>
