@@ -9,15 +9,15 @@ pipeline {
         skipDefaultCheckout true
     }
     environment {
-      JAVA_TOOL_OPTIONS = ''
-      MAVEN_OPTS = '-Dstyle.color=always -Djansi.passthrough=true'
-      JAVA_HOME = "${env.JAVA_HOME_11}"
+        JAVA_TOOL_OPTIONS = ''
+        MAVEN_OPTS = '-Dstyle.color=always -Djansi.passthrough=true'
+        JAVA_HOME = "${env.JAVA_HOME_11}"
     }
     stages {
         stage('Init') {
-            steps{
-                script{
-                  git branch: params.BASE_BRANCH, url: 'git@github.com:bonitasoft/bonita-project.git'
+            steps {
+                script {
+                    git branch: params.BASE_BRANCH, url: 'git@github.com:bonitasoft/bonita-project.git'
                 }
             }
 
@@ -26,14 +26,14 @@ pipeline {
             steps {
                 script {
                     sh " git config --global push.default matching"
-                   	sh """
+                    sh """
                         git config --global push.default matching
-						./mvnw -ntp versions:set -DnewVersion=${params.newVersion}
-						./mvnw -ntp -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${params.newVersion}
-						./mvnw -ntp -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${params.NEW_BRANDING_VERSION}
-						git commit -a -m "chore(release): prepare next development version ${params.newVersion}"
-					    git push
-					"""
+                        ./mvnw -ntp versions:set -DnewVersion=${params.newVersion} -Ptest
+                        ./mvnw -ntp -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${params.newVersion}
+                        ./mvnw -ntp -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${params.NEW_BRANDING_VERSION}
+                        git commit -a -m "chore(release): prepare next development version ${params.newVersion}"
+                        git push
+                    """
                 }
             }
         }
