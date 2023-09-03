@@ -11,6 +11,7 @@
         <!-- Unpack Tomcat Bundle artifact -->
         <dependencySet>
             <unpack>true</unpack>
+            <useStrictFiltering>true</useStrictFiltering>
             <includes>
                 <include>org.bonitasoft.distrib:bundle-tomcat</include>
             </includes>
@@ -19,8 +20,20 @@
         <dependencySet>
             <useProjectArtifact>true</useProjectArtifact>
             <useProjectAttachments>true</useProjectAttachments>
+            <useStrictFiltering>true</useStrictFiltering>
             <includes>
                 <include>${project.groupId}:${project.artifactId}:zip:${bonita.environment:lowercase}</include>
+            </includes>
+            <outputDirectory>
+                BonitaCommunity-${branding.version}/server/webapps/bonita/WEB-INF/classes/my-application/
+            </outputDirectory>
+        </dependencySet>
+        <!-- Copy bonita configuration archive into bundle classpath -->
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <useProjectAttachments>true</useProjectAttachments>
+            <useStrictFiltering>false</useStrictFiltering>
+            <includes>
                 <include>${project.groupId}:${project.artifactId}:bconf:${bonita.environment:lowercase}</include>
             </includes>
             <outputDirectory>

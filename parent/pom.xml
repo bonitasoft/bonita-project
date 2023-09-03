@@ -361,6 +361,22 @@
     <!-- Profile used to package the app as a Bundle Tomcat -->
     <profile>
       <id>bundle</id>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.bonitasoft.distrib</groupId>
+            <artifactId>bundle-tomcat</artifactId>
+            <version>${bonita.runtime.version}</version>
+            <type>zip</type>
+          </dependency>
+          <dependency>
+            <groupId>com.bonitasoft.distrib</groupId>
+            <artifactId>bundle-tomcat-sp</artifactId>
+            <version>${bonita.runtime.version}</version>
+            <type>zip</type>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
       <build>
         <pluginManagement>
           <plugins>
