@@ -54,10 +54,22 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>org.bonitasoft.runtime</groupId>
+        <artifactId>bonita-runtime-bom</artifactId>
+        <version>${bonita.runtime.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
         <groupId>org.codehaus.groovy</groupId>
         <artifactId>groovy-all</artifactId>
         <version>${groovy.version}</version>
         <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>com.bonitasoft</groupId>
+        <artifactId>bonita-test-toolkit</artifactId>
+        <version>${bonita-test-toolkit.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -134,6 +146,158 @@
             <useMavenLogger>true</useMavenLogger>
           </configuration>
         </plugin>
+        <!-- Bonita Project Maven Plugin definition -->
+        <plugin>
+          <groupId>org.bonitasoft.maven</groupId>
+          <artifactId>bonita-project-maven-plugin</artifactId>
+          <version>${bonita-project-maven-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.bonitasoft.engine.data</groupId>
+              <artifactId>bonita-business-data-generator</artifactId>
+              <version>${bonita.runtime.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.web</groupId>
+              <artifactId>ui-designer-artifact-builder</artifactId>
+              <version>${ui-designer-artifact-builder.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.bpm</groupId>
+              <artifactId>org.bonitasoft.bonita2bar</artifactId>
+              <version>${bonita-process-model.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <!-- Bonita Project assemblies definition -->
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven-assembly-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.bonitasoft</groupId>
+              <artifactId>bonita-project-assemblies</artifactId>
+              <version>${bonita.runtime.version}</version>
+            </dependency>
+          </dependencies>
+          <executions>
+            <!-- Assembly used to zip the BDM descriptor file (bom.xml) -->
+            <execution>
+              <id>bdm-descriptor-archive</id>
+              <phase>package</phase>
+              <configuration>
+                <descriptorRefs>
+                  <descriptorRef>bdm-assembly</descriptorRef>
+                </descriptorRefs>
+              </configuration>
+            </execution>
+            <!-- Assembly used to zip all Bonita artifacts -->
+            <execution>
+              <id>application-archive</id>
+              <phase>package</phase>
+              <configuration>
+                <outputDirectory>${bonita.applicationOutput}</outputDirectory>
+                <descriptorRefs>
+                  <descriptorRef>application-assembly</descriptorRef>
+                </descriptorRefs>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.gmavenplus</groupId>
+          <artifactId>gmavenplus-plugin</artifactId>
+          <version>${gmavenplus-plugin.version}</version>
+          <configuration>
+            <bindAllProjectProperties>true</bindAllProjectProperties>
+            <bindSessionUserOverrideProperties>true</bindSessionUserOverrideProperties>
+            <bindPropertiesToSeparateVariables>false</bindPropertiesToSeparateVariables>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.codehaus.groovy</groupId>
+              <artifactId>groovy</artifactId>
+              <version>${groovy.version}</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.codehaus.groovy</groupId>
+              <artifactId>groovy-ant</artifactId>
+              <version>${groovy.version}</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.bonitasoft</groupId>
+              <artifactId>bonita-project-assemblies</artifactId>
+              <version>${bonita.runtime.version}</version>
+              <scope>runtime</scope>
+            </dependency>
+          </dependencies>
+          <!-- Transform and initialize project properties used to build and package Bonita artifacts -->
+          <executions>
+            <execution>
+              <id>bonita-project-properties</id>
+              <phase>initialize</phase>
+              <configuration>
+                <scripts>
+                  <script><![CDATA[
+                    def project = properties.project
+                    def environment = properties.'bonita.environment'
+                    lcBonitaEnv = environment == null ? 'local' : environment.toLowerCase()
+                    project.properties.setProperty('bonita.environment:lowercase', lcBonitaEnv)
+                    project.properties.setProperty('project.artifactId:lowercase', project.artifactId.toLowerCase())
+                  ]]></script>
+                </scripts>
+              </configuration>
+            </execution>
+            <!-- Generate 'application.properties' file containing information (e.g. app's version) used to deploy the app -->
+            <execution>
+              <id>generate-application-properties</id>
+              <phase>generate-resources</phase>
+              <configuration>
+                <scripts>
+                  <script><![CDATA[
+                    def project = properties.project
+                    def propsFile = new File(project.build.directory, 'application.properties')
+                    propsFile.delete()
+                    propsFile.getParentFile().mkdirs()
+                    propsFile.createNewFile()
+                    def applicationProperties = new Properties()
+                    applicationProperties.setProperty('version', project.version)
+                    propsFile.withWriter { out ->
+                      applicationProperties.each { it ->
+                        out << it << System.lineSeparator()
+                      }
+                    }
+                  ]]></script>
+                </scripts>
+              </configuration>
+            </execution>
+            <!-- Copy Docker resources located in bonita-project-assemblies used to package the app as a Docker image -->
+            <execution>
+              <id>generate-docker-resources</id>
+              <phase>generate-resources</phase>
+              <configuration>
+                <scripts>
+                  <script><![CDATA[
+                    def dockerOutput = new File(properties.'bonita.applicationOutput')
+                    dockerOutput.mkdirs()
+
+                    // Copy resources from the bonita-project-assemblies resources jar
+                    def resourceList = ['Dockerfile', '.dockerignore']
+                    resourceList.each { name ->
+                      def file = new File(dockerOutput, name)
+                      file.createNewFile()
+                      def is = getClass().getResourceAsStream("/docker/$name")
+                      file.append(is)
+                      is.close()
+                    }
+                  ]]></script>
+                </scripts>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
@@ -194,193 +358,6 @@
     </plugins>
   </build>
   <profiles>
-    <!-- Default profile containing Bonita internal dependencies -->
-    <profile>
-      <id>withBonitaDependencies</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <dependencyManagement>
-        <dependencies>
-          <dependency>
-            <groupId>org.bonitasoft.runtime</groupId>
-            <artifactId>bonita-runtime-bom</artifactId>
-            <version>${bonita.runtime.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-          </dependency>
-          <dependency>
-            <groupId>com.bonitasoft</groupId>
-            <artifactId>bonita-test-toolkit</artifactId>
-            <version>${bonita-test-toolkit.version}</version>
-          </dependency>
-        </dependencies>
-      </dependencyManagement>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <!-- Bonita Project Maven Plugin definition -->
-            <plugin>
-              <groupId>org.bonitasoft.maven</groupId>
-              <artifactId>bonita-project-maven-plugin</artifactId>
-              <version>${bonita-project-maven-plugin.version}</version>
-              <dependencies>
-                <dependency>
-                  <groupId>org.bonitasoft.engine.data</groupId>
-                  <artifactId>bonita-business-data-generator</artifactId>
-                  <version>${bonita.runtime.version}</version>
-                </dependency>
-                <dependency>
-                  <groupId>org.bonitasoft.web</groupId>
-                  <artifactId>ui-designer-artifact-builder</artifactId>
-                  <version>${ui-designer-artifact-builder.version}</version>
-                </dependency>
-                <dependency>
-                  <groupId>org.bonitasoft.bpm</groupId>
-                  <artifactId>org.bonitasoft.bonita2bar</artifactId>
-                  <version>${bonita-process-model.version}</version>
-                </dependency>
-              </dependencies>
-            </plugin>
-            <!-- Bonita Project assemblies definition -->
-            <plugin>
-              <artifactId>maven-assembly-plugin</artifactId>
-              <version>${maven-assembly-plugin.version}</version>
-              <dependencies>
-                <dependency>
-                  <groupId>org.bonitasoft</groupId>
-                  <artifactId>bonita-project-assemblies</artifactId>
-                  <version>${bonita.runtime.version}</version>
-                </dependency>
-              </dependencies>
-              <executions>
-                <!-- Assembly used to zip the BDM descriptor file (bom.xml) -->
-                <execution>
-                  <id>bdm-descriptor-archive</id>
-                  <phase>package</phase>
-                  <configuration>
-                    <descriptorRefs>
-                      <descriptorRef>bdm-assembly</descriptorRef>
-                    </descriptorRefs>
-                  </configuration>
-                </execution>
-                <!-- Assembly used to zip all Bonita artifacts -->
-                <execution>
-                  <id>application-archive</id>
-                  <phase>package</phase>
-                  <configuration>
-                    <outputDirectory>${bonita.applicationOutput}</outputDirectory>
-                    <descriptorRefs>
-                      <descriptorRef>application-assembly</descriptorRef>
-                    </descriptorRefs>
-                  </configuration>
-                </execution>
-              </executions>
-            </plugin>
-            <plugin>
-              <groupId>org.codehaus.gmavenplus</groupId>
-              <artifactId>gmavenplus-plugin</artifactId>
-              <version>${gmavenplus-plugin.version}</version>
-              <configuration>
-                <bindAllProjectProperties>true</bindAllProjectProperties>
-                <bindSessionUserOverrideProperties>true</bindSessionUserOverrideProperties>
-                <bindPropertiesToSeparateVariables>false</bindPropertiesToSeparateVariables>
-              </configuration>
-              <dependencies>
-                <dependency>
-                  <groupId>org.codehaus.groovy</groupId>
-                  <artifactId>groovy</artifactId>
-                  <version>${groovy.version}</version>
-                  <scope>runtime</scope>
-                </dependency>
-                <dependency>
-                  <groupId>org.codehaus.groovy</groupId>
-                  <artifactId>groovy-ant</artifactId>
-                  <version>${groovy.version}</version>
-                  <scope>runtime</scope>
-                </dependency>
-                <dependency>
-                  <groupId>org.bonitasoft</groupId>
-                  <artifactId>bonita-project-assemblies</artifactId>
-                  <version>${bonita.runtime.version}</version>
-                  <scope>runtime</scope>
-                </dependency>
-              </dependencies>
-              <!-- Transform and initialize project properties used to build and package Bonita artifacts -->
-              <executions>
-                <execution>
-                  <id>bonita-project-properties</id>
-                  <phase>initialize</phase>
-                  <configuration>
-                    <scripts>
-                      <script><![CDATA[
-                        def project = properties.project
-                        def environment = properties.'bonita.environment'
-                        lcBonitaEnv = environment == null ? 'local' : environment.toLowerCase()
-                        project.properties.setProperty('bonita.environment:lowercase', lcBonitaEnv)
-                        project.properties.setProperty('project.artifactId:lowercase', project.artifactId.toLowerCase())
-                      ]]></script>
-                    </scripts>
-                  </configuration>
-                </execution>
-                <!-- Generate 'application.properties' file containing information (e.g. app's version) used to deploy the app -->
-                <execution>
-                  <id>generate-application-properties</id>
-                  <phase>generate-resources</phase>
-                  <configuration>
-                    <scripts>
-                      <script><![CDATA[
-                        def project = properties.project
-                        def propsFile = new File(project.build.directory, 'application.properties')
-                        propsFile.delete()
-                        propsFile.getParentFile().mkdirs()
-                        propsFile.createNewFile()
-                        def applicationProperties = new Properties()
-                        applicationProperties.setProperty('version', project.version)
-                        propsFile.withWriter { out ->
-                          applicationProperties.each { it ->
-                            out << it << System.lineSeparator()
-                          }
-                        }
-                      ]]></script>
-                    </scripts>
-                  </configuration>
-                </execution>
-                <!-- Copy Docker resources located in bonita-project-assemblies used to package the app as a Docker image -->
-                <execution>
-                  <id>generate-docker-resources</id>
-                  <phase>generate-resources</phase>
-                  <configuration>
-                    <scripts>
-                      <script><![CDATA[
-                        def dockerOutput = new File(properties.'bonita.applicationOutput')
-                        dockerOutput.mkdirs()
-    
-                        // Copy resources from the bonita-project-assemblies resources jar
-                        def resourceList = ['Dockerfile', '.dockerignore']
-                        resourceList.each { name ->
-                          def file = new File(dockerOutput, name)
-                          file.createNewFile()
-                          def is = getClass().getResourceAsStream("/docker/$name")
-                          file.append(is)
-                          is.close()
-                        }
-                      ]]></script>
-                    </scripts>
-                  </configuration>
-                </execution>
-              </executions>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
-    <!-- Profile used to set versions and ignore internal dependencies resolution -->
-    <profile>
-      <id>versionsUpdate</id>
-      <dependencyManagement></dependencyManagement>
-      <build></build>
-    </profile>
     <!-- Profile used to package the app as a Bundle Tomcat -->
     <profile>
       <id>bundle</id>
