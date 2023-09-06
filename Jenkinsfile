@@ -16,8 +16,9 @@ pipeline {
                 configFileProvider([configFile(fileId: 'maven-settings', variable: 'MAVEN_SETTINGS')]) {
                     script {
                         try {
-                            sh("./mvnw -s $MAVEN_SETTINGS --no-transfer-progress -B verify -Ptest")
+                            sh("./mvnw -s $MAVEN_SETTINGS --no-transfer-progress -B verify -Ptests")
                         } finally {
+                            junit allowEmptyResults : true, testResults: 'tests/**/target/*-reports/TEST-*.xml'
                             archiveArtifacts artifacts: 'tests/target/it/**/*.log', allowEmptyArchive: true
                         }
                     }

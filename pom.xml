@@ -288,7 +288,7 @@
       </build>
     </profile>
     <profile>
-      <id>test</id>
+      <id>tests</id>
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>

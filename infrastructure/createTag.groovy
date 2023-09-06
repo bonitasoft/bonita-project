@@ -27,7 +27,7 @@ pipeline {
                 script {
                     sh """
                         git checkout -B release/${params.TAG_NAME}
-                        ./mvnw -ntp versions:set -DnewVersion=${params.TAG_NAME} -Ptest
+                        ./mvnw -ntp versions:set -DnewVersion=${params.TAG_NAME} -Ptests
                         ./mvnw -ntp -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${params.NEW_BRANDING_VERSION}
                         ./mvnw -ntp -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${params.TAG_NAME}
                         git commit -a -m "release(${params.TAG_NAME}) create release ${params.TAG_NAME}"
