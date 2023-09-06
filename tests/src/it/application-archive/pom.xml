@@ -4,25 +4,13 @@
   <parent>
     <groupId>org.bonitasoft</groupId>
     <artifactId>bonita-project</artifactId>
-    <version>${project.version}</version>
+    <version>@bonita-project-version@</version>
   </parent>
   <groupId>com.company</groupId>
   <artifactId>my-project-parent</artifactId>
   <version>1.0.0</version>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.gmavenplus</groupId>
-        <artifactId>gmavenplus-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-docker-resources</id>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+  <packaging>pom</packaging>
+  <modules>
+    <module>app</module>
+  </modules>
 </project>

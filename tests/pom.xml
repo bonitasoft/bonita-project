@@ -18,24 +18,23 @@
     </dependency>
   </dependencies>
   <build>
-    <testResources>
-      <!-- Used to inject current project.version into test POMs that require bonita-project as parent -->
-      <testResource>
-        <targetPath>${project.basedir}/src/it</targetPath>
-        <filtering>true</filtering>
-        <directory>src/test/resources</directory>
-      </testResource>
-    </testResources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-invoker-plugin</artifactId>
         <configuration>
+          <extraArtifacts>org.bonitasoft.distrib:bundle-tomcat:${project.version}:zip,com.bonitasoft.distrib:bundle-tomcat-sp:${project.version}:zip</extraArtifacts>
           <skipInvocation>${skipTests}</skipInvocation>
           <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
           <settingsFile>src/it/settings.xml</settingsFile>
           <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+          <preBuildHookScript>setup</preBuildHookScript>
           <postBuildHookScript>verify</postBuildHookScript>
+          <writeJunitReport>true</writeJunitReport>
+          <junitPackageName></junitPackageName>
+          <scriptVariables>
+            <bonitaProjectVersion>${project.version}</bonitaProjectVersion>
+          </scriptVariables>
         </configuration>
         <executions>
           <execution>

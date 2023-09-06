@@ -14,7 +14,14 @@ pipeline {
         stage('Build') {
             steps {
                 configFileProvider([configFile(fileId: 'maven-settings', variable: 'MAVEN_SETTINGS')]) {
-                    sh("./mvnw -s $MAVEN_SETTINGS --no-transfer-progress -B verify -Ptest")
+                    script {
+                        try {
+                            sh("./mvnw -s $MAVEN_SETTINGS --no-transfer-progress -B verify -Ptests")
+                        } finally {
+                            junit allowEmptyResults : true, testResults: 'tests/**/target/*-reports/TEST-*.xml', keepLongStdio: true
+                            archiveArtifacts artifacts: 'tests/target/it/**/*.log', allowEmptyArchive: true
+                        }
+                    }
                 }
             }
         }

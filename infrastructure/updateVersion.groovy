@@ -28,7 +28,7 @@ pipeline {
                     sh " git config --global push.default matching"
                     sh """
                         git config --global push.default matching
-                        ./mvnw -ntp versions:set -DnewVersion=${params.newVersion} -Ptest
+                        ./mvnw -ntp versions:set -DnewVersion=${params.newVersion} -Ptests
                         ./mvnw -ntp -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${params.newVersion}
                         ./mvnw -ntp -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${params.NEW_BRANDING_VERSION}
                         git commit -a -m "chore(release): prepare next development version ${params.newVersion}"
