@@ -289,6 +289,9 @@
     </profile>
     <profile>
       <id>test</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
       <modules>
         <module>tests</module>
       </modules>
