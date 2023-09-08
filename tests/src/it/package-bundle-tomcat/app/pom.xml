@@ -42,6 +42,29 @@
       <build>
         <plugins>
           <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>prepare-bundle</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+           <plugin>
+            <groupId>org.codehaus.gmavenplus</groupId>
+            <artifactId>gmavenplus-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>configure-bundle</id>
+                <goals>
+                  <goal>execute</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
@@ -54,13 +77,6 @@
           </plugin>
         </plugins>
       </build>
-      <dependencies>
-        <dependency>
-          <groupId>org.bonitasoft.distrib</groupId>
-          <artifactId>bundle-tomcat</artifactId>
-          <type>zip</type>
-        </dependency>
-      </dependencies>
     </profile>
   </profiles>
 </project>

@@ -6,17 +6,25 @@
         <format>zip</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
-    <baseDirectory>${project.build.directory}/package-bundle-tomcat</baseDirectory>
-    <dependencySets>
-        <!-- Unpack Tomcat Bundle artifact -->
-        <dependencySet>
-            <unpack>true</unpack>
-            <useStrictFiltering>true</useStrictFiltering>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}/bundle</directory>
+            <outputDirectory>.</outputDirectory>
+            <excludes>
+                <exclude>BonitaCommunity-${branding.version}/setup/platform_conf/initial/platform_engine/bonita-platform-community-custom.properties</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/bundle</directory>
+            <outputDirectory>.</outputDirectory>
+            <filtered>true</filtered>
             <includes>
-                <include>org.bonitasoft.distrib:bundle-tomcat</include>
+                <include>BonitaCommunity-${branding.version}/setup/platform_conf/initial/platform_engine/bonita-platform-community-custom.properties</include>
             </includes>
-        </dependencySet>
-        <!-- Copy application zip into bundle classpath -->
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <!-- Copy application archive into bundle classpath -->
         <dependencySet>
             <useProjectArtifact>true</useProjectArtifact>
             <useProjectAttachments>true</useProjectAttachments>
@@ -25,7 +33,7 @@
                 <include>${project.groupId}:${project.artifactId}:zip:${bonita.environment:lowercase}</include>
             </includes>
             <outputDirectory>
-                BonitaCommunity-${branding.version}/server/webapps/bonita/WEB-INF/classes/my-application/
+               BonitaCommunity-${branding.version}/server/webapps/bonita/WEB-INF/classes/my-application/
             </outputDirectory>
         </dependencySet>
         <!-- Copy bonita configuration archive into bundle classpath -->

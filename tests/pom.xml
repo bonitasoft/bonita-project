@@ -16,6 +16,11 @@
       <version>${project.version}</version>
       <type>pom</type>
     </dependency>
+    <dependency>
+      <groupId>org.bonitasoft</groupId>
+      <artifactId>bonita-project-assemblies</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

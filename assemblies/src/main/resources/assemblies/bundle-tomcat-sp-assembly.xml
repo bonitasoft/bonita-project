@@ -6,16 +6,24 @@
         <format>zip</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
-    <baseDirectory>${project.build.directory}/package-bundle-tomcat-sp</baseDirectory>
-    <dependencySets>
-        <!-- Unpack Tomcat Bundle artifact -->
-        <dependencySet>
-            <unpack>true</unpack>
-            <useStrictFiltering>true</useStrictFiltering>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}/bundle</directory>
+            <outputDirectory>.</outputDirectory>
+            <excludes>
+                <exclude>BonitaSubscription-${branding.version}/setup/platform_conf/initial/platform_engine/bonita-platform-community-custom.properties</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/bundle</directory>
+            <outputDirectory>.</outputDirectory>
+            <filtered>true</filtered>
             <includes>
-                <include>com.bonitasoft.distrib:bundle-tomcat-sp</include>
+                <include>BonitaSubscription-${branding.version}/setup/platform_conf/initial/platform_engine/bonita-platform-community-custom.properties</include>
             </includes>
-        </dependencySet>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
         <!-- Copy application archive into bundle classpath -->
         <dependencySet>
             <useProjectArtifact>true</useProjectArtifact>

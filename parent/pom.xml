@@ -41,6 +41,7 @@
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
     <bonita.runtime.version>9.0-SNAPSHOT</bonita.runtime.version>
     <branding.version>2023.2-SNAPSHOT</branding.version>
+    <bonita-artifacts-model.version>1.0.0-alpha-01</bonita-artifacts-model.version>
     <ui-designer-artifact-builder.version>1.0.0-alpha-07</ui-designer-artifact-builder.version>
     <bonita-process-model.version>8.0.0-SNAPSHOT</bonita-process-model.version>
     <bonita-project-maven-plugin.version>1.0.0-SNAPSHOT</bonita-project-maven-plugin.version>
@@ -177,6 +178,46 @@
               <artifactId>org.bonitasoft.bonita2bar</artifactId>
               <version>${bonita-process-model.version}</version>
             </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.engine</groupId>
+              <artifactId>bonita-business-archive</artifactId>
+              <version>${bonita-artifacts-model.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.engine</groupId>
+              <artifactId>bonita-form-mapping-model</artifactId>
+              <version>${bonita-artifacts-model.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.engine</groupId>
+              <artifactId>bonita-process-definition-model</artifactId>
+              <version>${bonita-artifacts-model.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.engine</groupId>
+              <artifactId>bonita-application-model</artifactId>
+              <version>${bonita-artifacts-model.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.engine</groupId>
+              <artifactId>bonita-business-object-model</artifactId>
+              <version>${bonita-artifacts-model.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.engine</groupId>
+              <artifactId>bonita-bdm-access-control-model</artifactId>
+              <version>${bonita-artifacts-model.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.engine</groupId>
+              <artifactId>bonita-profile-model</artifactId>
+              <version>${bonita-artifacts-model.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.engine</groupId>
+              <artifactId>bonita-organization-model</artifactId>
+              <version>${bonita-artifacts-model.version}</version>
+            </dependency>
           </dependencies>
         </plugin>
         <!-- Bonita Project assemblies definition -->
@@ -242,6 +283,12 @@
               <version>${bonita.runtime.version}</version>
               <scope>runtime</scope>
             </dependency>
+            <dependency>
+              <groupId>org.bonitasoft.engine</groupId>
+              <artifactId>bonita-application-model</artifactId>
+              <version>${bonita-artifacts-model.version}</version>
+              <scope>runtime</scope>
+            </dependency>
           </dependencies>
           <!-- Transform and initialize project properties used to build and package Bonita artifacts -->
           <executions>
@@ -251,11 +298,20 @@
               <configuration>
                 <scripts>
                   <script><![CDATA[
+                    import org.bonitasoft.project.ProvidedPagesDetector
+                    
                     def project = properties.project
                     def environment = properties.'bonita.environment'
                     lcBonitaEnv = environment == null ? 'local' : environment.toLowerCase()
                     project.properties.setProperty('bonita.environment:lowercase', lcBonitaEnv)
                     project.properties.setProperty('project.artifactId:lowercase', project.artifactId.toLowerCase())
+                    
+                    def appFolder = project.basedir.toPath().resolve('applications');
+                    if(appFolder.toFile().isDirectory()){
+                        // Determine if install provided pages flags should be enabled by default or not
+                        def detector = new ProvidedPagesDetector()
+                        project.properties.setProperty('bonita.installProvidedPages', String.valueOf(detector.installProvidedPages(appFolder.toFile())))
+                    }
                   ]]></script>
                 </scripts>
               </configuration>
@@ -371,25 +427,70 @@
     <!-- Profile used to package the app as a Bundle Tomcat -->
     <profile>
       <id>bundle</id>
-      <dependencyManagement>
-        <dependencies>
-          <dependency>
-            <groupId>org.bonitasoft.distrib</groupId>
-            <artifactId>bundle-tomcat</artifactId>
-            <version>${bonita.runtime.version}</version>
-            <type>zip</type>
-          </dependency>
-          <dependency>
-            <groupId>com.bonitasoft.distrib</groupId>
-            <artifactId>bundle-tomcat-sp</artifactId>
-            <version>${bonita.runtime.version}</version>
-            <type>zip</type>
-          </dependency>
-        </dependencies>
-      </dependencyManagement>
       <build>
         <pluginManagement>
           <plugins>
+            <plugin>
+              <artifactId>maven-dependency-plugin</artifactId>
+              <version>${maven-dependency-plugin.version}</version>
+              <executions>
+                <!-- Unpack community bundle -->
+                <execution>
+                  <id>prepare-bundle</id>
+                  <phase>process-resources</phase>
+                  <configuration>
+                    <artifactItems>
+                      <artifactItem>
+                        <groupId>org.bonitasoft.distrib</groupId>
+                        <artifactId>bundle-tomcat</artifactId>
+                        <version>${bonita.runtime.version}</version>
+                        <type>zip</type>
+                        <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                      </artifactItem>
+                    </artifactItems>
+                  </configuration>
+                </execution>
+                <!-- Unpack enterprise bundle -->
+                <execution>
+                  <id>prepare-bundle-enterprise</id>
+                  <phase>process-resources</phase>
+                  <configuration>
+                    <artifactItems>
+                      <artifactItem>
+                        <groupId>com.bonitasoft.distrib</groupId>
+                        <artifactId>bundle-tomcat-sp</artifactId>
+                        <version>${bonita.runtime.version}</version>
+                        <type>zip</type>
+                        <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                      </artifactItem>
+                    </artifactItems>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+            <plugin>
+              <groupId>org.codehaus.gmavenplus</groupId>
+              <artifactId>gmavenplus-plugin</artifactId>
+              <!-- Inject properties in configuration to be filtered during assembly -->
+              <executions>
+                <execution>
+                  <id>configure-bundle</id>
+                  <phase>process-resources</phase>
+                  <configuration>
+                    <scripts>
+                      <script><![CDATA[
+                    def bundleFolder = new File(properties.project.build.directory, 'bundle')
+                    
+                    bundleFolder.traverse(type: groovy.io.FileType.FILES, nameFilter: ~/bonita-platform-community-custom.properties/) { it ->
+                       // Uncomment property and use the project properties
+                       it.text = it.text.replace('#bonita.runtime.custom-application.install-provided-pages=false','bonita.runtime.custom-application.install-provided-pages=${bonita.installProvidedPages}')
+                    }
+                  ]]></script>
+                    </scripts>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
             <plugin>
               <artifactId>maven-assembly-plugin</artifactId>
               <version>${maven-assembly-plugin.version}</version>
@@ -431,7 +532,7 @@
         <docker.imageName>${docker.imageRepository}:${project.version}</docker.imageName>
         <docker.noCache>true</docker.noCache>
         <docker.buildArgs></docker.buildArgs>
-        <docker.buildArgLine>build "." --build-arg BONITA_BASE_IMAGE="${docker.baseImage}" ${docker.buildArgs} --no-cache="${docker.noCache}" --tag "${docker.imageName}"</docker.buildArgLine>
+        <docker.buildArgLine>build "." --build-arg BONITA_BASE_IMAGE="${docker.baseImage}" --build-arg INSTALL_PROVIDED_PAGES_ARG=${bonita.installProvidedPages} ${docker.buildArgs} --no-cache="${docker.noCache}" --tag "${docker.imageName}"</docker.buildArgLine>
       </properties>
       <build>
         <pluginManagement>

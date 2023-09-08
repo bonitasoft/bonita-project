@@ -26,7 +26,6 @@
   <modules>
     <module>parent</module>
     <module>assemblies</module>
-    <module>tests</module>
   </modules>
   <scm child.scm.connection.inherit.append.path="false" child.scm.developerConnection.inherit.append.path="false" child.scm.url.inherit.append.path="false">
     <connection>scm:git:git@github.com:bonitasoft/bonita-project.git</connection>
