@@ -91,10 +91,59 @@
         <dependencySet>
             <scope>runtime</scope>
             <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
             <includes>
                 <include>*:zip</include>
             </includes>
+            <excludes>
+                <!-- Application dependencies are handled in the dependencySet below-->
+                <exclude>*:*:zip:application:*</exclude>
+            </excludes>
             <outputDirectory>extensions</outputDirectory>
+        </dependencySet>
+        <dependencySet>
+            <scope>runtime</scope>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <includes>
+                <include>*:*:zip:application:*</include>
+            </includes>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <includes>
+                    <include>**/pages/*.zip</include>
+                </includes>
+            </unpackOptions>
+            <outputDirectory/>
+        </dependencySet>
+        <dependencySet>
+            <scope>runtime</scope>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <includes>
+                <include>*:*:zip:application:*</include>
+            </includes>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <includes>
+                    <include>**/applications/*.xml</include>
+                    <include>**/applications/*.png</include>
+                </includes>
+            </unpackOptions>
+        </dependencySet>
+        <dependencySet>
+            <scope>runtime</scope>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <includes>
+                <include>*:*:zip:application:*</include>
+            </includes>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <includes>
+                    <include>**/extensions/*.zip</include>
+                </includes>
+            </unpackOptions>
         </dependencySet>
     </dependencySets>
 </assembly>

@@ -37,7 +37,6 @@
     <groovy.version>3.0.19</groovy.version>
     <!-- Bonita specific properties below -->
     <bonita.environment>local</bonita.environment>
-    <bonita.applicationOutput>${project.build.directory}/${project.artifactId}-${bonita.environment}-${project.version}-output</bonita.applicationOutput>
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
     <bonita.runtime.version>9.0-SNAPSHOT</bonita.runtime.version>
     <branding.version>2023.2-SNAPSHOT</branding.version>
@@ -67,6 +66,27 @@
         <artifactId>groovy-all</artifactId>
         <version>${groovy.version}</version>
         <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.bonitasoft.web.application</groupId>
+        <artifactId>bonita-user-application</artifactId>
+        <version>${bonita.runtime.version}</version>
+        <classifier>application</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.bonitasoft.web.application</groupId>
+        <artifactId>bonita-admin-application</artifactId>
+        <version>${bonita.runtime.version}</version>
+        <classifier>application</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.bonitasoft.web.application</groupId>
+        <artifactId>bonita-admin-application-sp</artifactId>
+        <version>${bonita.runtime.version}</version>
+        <classifier>application</classifier>
+        <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.bonitasoft</groupId>
@@ -247,7 +267,6 @@
               <id>application-archive</id>
               <phase>package</phase>
               <configuration>
-                <outputDirectory>${bonita.applicationOutput}</outputDirectory>
                 <descriptorRefs>
                   <descriptorRef>application-assembly</descriptorRef>
                 </descriptorRefs>
@@ -346,11 +365,11 @@
               <configuration>
                 <scripts>
                   <script><![CDATA[
-                    def dockerOutput = new File(properties.'bonita.applicationOutput')
+                    def dockerOutput = new File(properties.project.build.directory)
                     dockerOutput.mkdirs()
 
                     // Copy resources from the bonita-project-assemblies resources jar
-                    def resourceList = ['Dockerfile', '.dockerignore']
+                    def resourceList = ['Dockerfile']
                     resourceList.each { name ->
                       def file = new File(dockerOutput, name)
                       file.createNewFile()
@@ -418,6 +437,26 @@
             <goals>
               <goal>validate</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+            <phase>process-resources</phase>
+          </execution>
+          <execution>
+            <id>flatten.clean</id>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <phase>clean</phase>
           </execution>
         </executions>
       </plugin>
@@ -532,7 +571,7 @@
         <docker.imageName>${docker.imageRepository}:${project.version}</docker.imageName>
         <docker.noCache>true</docker.noCache>
         <docker.buildArgs></docker.buildArgs>
-        <docker.buildArgLine>build "." --build-arg BONITA_BASE_IMAGE="${docker.baseImage}" --build-arg INSTALL_PROVIDED_PAGES_ARG=${bonita.installProvidedPages} ${docker.buildArgs} --no-cache="${docker.noCache}" --tag "${docker.imageName}"</docker.buildArgLine>
+        <docker.buildArgLine>build "." --build-arg ARTIFACT_FINAL_NAME=${project.build.finalName} --build-arg BONITA_ENVIRONMENT=${bonita.environment:lowercase} --build-arg BONITA_BASE_IMAGE="${docker.baseImage}" --build-arg INSTALL_PROVIDED_PAGES_ARG=${bonita.installProvidedPages} ${docker.buildArgs} --no-cache="${docker.noCache}" --tag "${docker.imageName}"</docker.buildArgLine>
       </properties>
       <build>
         <pluginManagement>
@@ -545,7 +584,7 @@
                   <id>build-image</id>
                   <phase>package</phase>
                   <configuration>
-                    <workingDirectory>${bonita.applicationOutput}</workingDirectory>
+                    <workingDirectory>${project.build.directory}</workingDirectory>
                     <executable>docker</executable>
                     <commandlineArgs>${docker.buildArgLine}</commandlineArgs>
                   </configuration>
