@@ -48,7 +48,7 @@
     <!-- Default inclusion filters -->
     <include.organizations>*.xml</include.organizations>
     <include.profiles>*.xml</include.profiles>
-    <include.applications>*.xml</include.applications>
+    <include.applications>*</include.applications>
     <include.processes>*.bar</include.processes>
     <include.pages>*.zip</include.pages>
   </properties>
