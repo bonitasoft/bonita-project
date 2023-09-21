@@ -6,7 +6,7 @@ assertProperty(testProps, 'docker.baseImage', "bonita:$bonitaProjectVersion")
 assertProperty(testProps, 'docker.imageRepository', 'my-project-local')
 assertProperty(testProps, 'docker.imageName', 'my-project-local:1.0.0')
 assertProperty(testProps, 'docker.noCache', 'true')
-assertProperty(testProps, 'docker.buildArgLine', "build \".\" --build-arg ARTIFACT_FINAL_NAME=my-project-1.0.0 --build-arg BONITA_ENVIRONMENT=local --build-arg BONITA_BASE_IMAGE=\"bonita:$bonitaProjectVersion\" --build-arg INSTALL_PROVIDED_PAGES_ARG=true  --no-cache=\"true\" --tag \"my-project-local:1.0.0\"")
+assertProperty(testProps, 'docker.buildArgLine', "build \".\" --build-arg ARTIFACT_FINAL_NAME=my-project-1.0.0 --build-arg BONITA_ENVIRONMENT=local --build-arg BONITA_BASE_IMAGE=\"bonita:$bonitaProjectVersion\"  --no-cache=\"true\" --tag \"my-project-local:1.0.0\"")
 
 Properties getTestProperties(String path) {
     File testPropsFile = new File(basedir, path);

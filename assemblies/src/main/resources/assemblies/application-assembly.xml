@@ -65,6 +65,16 @@
             </excludes>
         </fileSet>
         <fileSet>
+            <outputDirectory>pages</outputDirectory>
+            <directory>${project.build.directory}/provided-pages</directory>
+            <includes>
+                <include>${include.pages}</include>
+            </includes>
+            <excludes>
+                <exclude>${exclude.pages}</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
             <outputDirectory/>
             <directory>${project.build.directory}</directory>
             <includes>
