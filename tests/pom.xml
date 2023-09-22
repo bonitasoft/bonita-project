@@ -28,7 +28,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-invoker-plugin</artifactId>
         <configuration>
-          <extraArtifacts>org.bonitasoft.distrib:bundle-tomcat:${project.version}:zip,com.bonitasoft.distrib:bundle-tomcat-sp:${project.version}:zip</extraArtifacts>
+          <extraArtifacts>org.bonitasoft.web.page:page-user-task-list:${project.version}:zip,org.bonitasoft.distrib:bundle-tomcat:${project.version}:zip,com.bonitasoft.distrib:bundle-tomcat-sp:${project.version}:zip</extraArtifacts>
           <skipInvocation>${skipTests}</skipInvocation>
           <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
           <settingsFile>src/it/settings.xml</settingsFile>
