@@ -442,22 +442,15 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <!-- Execute Bonita artifacts validation -->
       <plugin>
         <groupId>org.bonitasoft.maven</groupId>
         <artifactId>bonita-project-maven-plugin</artifactId>
         <executions>
-          <!-- Execute Bonita artifacts validation -->
           <execution>
             <id>validate-artifacts</id>
             <goals>
               <goal>validate</goal>
-            </goals>
-          </execution>
-          <!-- Copy Bonita provided pages if needed -->
-          <execution>
-            <id>copy-provided-pages</id>
-            <goals>
-              <goal>copy-provided-pages</goal>
             </goals>
           </execution>
         </executions>

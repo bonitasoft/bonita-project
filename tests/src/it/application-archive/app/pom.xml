@@ -34,6 +34,18 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.bonitasoft.maven</groupId>
+        <artifactId>bonita-project-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-provided-pages</id>
+            <goals>
+              <goal>copy-provided-pages</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>
