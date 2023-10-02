@@ -1,0 +1,33 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.2.0 https://maven.apache.org/xsd/assembly-2.2.0.xsd">
+    <id>classpath</id>
+    <formats>
+        <format>dir</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <!-- Avoid empty assembly error by including the generated assembly file -->
+    <files>
+        <file>
+            <source>${project.build.directory}/classpath/classpath-assembly.xml</source>
+        </file>
+    </files>
+    <dependencySets>
+        <dependencySet>
+            <scope>runtime</scope>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>true</useTransitiveDependencies>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+            <includes>
+                <include>*:jar</include>
+            </includes>
+            <excludes>
+                <exclude>*:zip</exclude>
+                <exclude>org.bonitasoft.engine:bonita-common</exclude>
+                <exclude>com.bonitasoft.engine:bonita-common-sp</exclude>
+                <exclude>org.bonitasoft.engine:bonita-server</exclude>
+                <exclude>com.bonitasoft.engine:bonita-server-sp</exclude>
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+</assembly>
