@@ -305,7 +305,7 @@
                 <finalName>classpath</finalName>
                 <appendAssemblyId>false</appendAssemblyId>
                 <descriptors>
-                  <descriptor>${project.build.directory}/classpath/classpath-assembly.xml</descriptor>
+                  <descriptor>${project.build.directory}/assemblies/classpath-assembly.xml</descriptor>
                 </descriptors>
               </configuration>
             </execution>
@@ -408,9 +408,9 @@
                     def project = properties.project
                     
                     // Classpath assembly templating
-                    def classpathFolder = new File(project.build.directory, 'classpath')
-                    classpathFolder.mkdirs()
-                    def assemblyFile = new File(classpathFolder, 'classpath-assembly.xml')
+                    def assembliesFolder = new File(project.build.directory, 'assemblies')
+                    assembliesFolder.mkdirs()
+                    def assemblyFile = new File(assembliesFolder, 'classpath-assembly.xml')
                     assemblyFile.createNewFile()
                     def is = getClass().getResourceAsStream("/assemblies/${assemblyFile.name}")
                     assemblyFile.append(is)

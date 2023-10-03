@@ -6,12 +6,16 @@
         <format>dir</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
-    <!-- Avoid empty assembly error by including the generated assembly file -->
-    <files>
-        <file>
-            <source>${project.build.directory}/classpath/classpath-assembly.xml</source>
-        </file>
-    </files>
+    <!-- Avoid empty assembly error by including an empty folder -->
+    <fileSets>
+      <fileSet>
+          <directory>${project.basedir}/target</directory>
+          <outputDirectory>ignored-empty-folder</outputDirectory>
+          <excludes>
+              <exclude>*/**</exclude>
+          </excludes>
+      </fileSet>
+    </fileSets>
     <dependencySets>
         <dependencySet>
             <scope>runtime</scope>
