@@ -10,17 +10,15 @@
         <fileSet>
             <directory>${project.build.directory}/bundle</directory>
             <outputDirectory>.</outputDirectory>
-            <excludes>
-                <exclude>BonitaCommunity-${branding.version}/setup/platform_conf/initial/platform_engine/bonita-platform-community-custom.properties</exclude>
-            </excludes>
         </fileSet>
         <fileSet>
-            <directory>${project.build.directory}/bundle</directory>
-            <outputDirectory>.</outputDirectory>
-            <filtered>true</filtered>
+            <directory>${project.build.directory}/classpath</directory>
             <includes>
-                <include>BonitaCommunity-${branding.version}/setup/platform_conf/initial/platform_engine/bonita-platform-community-custom.properties</include>
+                <include>*.jar</include>
             </includes>
+             <outputDirectory>
+               BonitaCommunity-${branding.version}/server/webapps/bonita/WEB-INF/lib/
+            </outputDirectory>
         </fileSet>
     </fileSets>
     <dependencySets>

@@ -296,6 +296,19 @@
                 </descriptorRefs>
               </configuration>
             </execution>
+            <!-- Assembly used to build the webapp classpath -->
+            <execution>
+              <id>application-classpath</id>
+              <phase>package</phase>
+              <configuration>
+                <attach>false</attach>
+                <finalName>classpath</finalName>
+                <appendAssemblyId>false</appendAssemblyId>
+                <descriptors>
+                  <descriptor>${project.build.directory}/classpath/classpath-assembly.xml</descriptor>
+                </descriptors>
+              </configuration>
+            </execution>
           </executions>
         </plugin>
         <plugin>
@@ -310,7 +323,13 @@
           <dependencies>
             <dependency>
               <groupId>org.codehaus.groovy</groupId>
-              <artifactId>groovy</artifactId>
+              <artifactId>groovy-json</artifactId>
+              <version>${groovy.version}</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.codehaus.groovy</groupId>
+              <artifactId>groovy-xml</artifactId>
               <version>${groovy.version}</version>
               <scope>runtime</scope>
             </dependency>
@@ -368,6 +387,51 @@
                       applicationProperties.each { it ->
                         out << it << System.lineSeparator()
                       }
+                    }
+                  ]]></script>
+                </scripts>
+              </configuration>
+            </execution>
+            <!-- Generate 'classpath-assembly.xml' file use to add additional dependencies in the webapp classpath -->
+            <execution>
+              <id>generate-classpath-assembly</id>
+              <phase>prepare-package</phase>
+              <configuration>
+                <scripts>
+                  <script><![CDATA[
+                    import groovy.json.JsonSlurper
+                    import groovy.xml.XmlSlurper
+                    import groovy.xml.XmlUtil 
+                    import org.slf4j.LoggerFactory                    
+                    
+                    def log = LoggerFactory.getLogger(getClass())
+                    def project = properties.project
+                    
+                    // Classpath assembly templating
+                    def classpathFolder = new File(project.build.directory, 'classpath')
+                    classpathFolder.mkdirs()
+                    def assemblyFile = new File(classpathFolder, 'classpath-assembly.xml')
+                    assemblyFile.createNewFile()
+                    def is = getClass().getResourceAsStream("/assemblies/${assemblyFile.name}")
+                    assemblyFile.append(is)
+                    is.close()
+                    
+                    def dependencyReportFile = new File(project.build.directory, 'bonita-dependencies.json')
+                    if(dependencyReportFile.exists()){
+                        def report = new JsonSlurper().parse(dependencyReportFile)
+                        // Excluding Bonita connectors and actor filters artifacts
+                        def implementations = report.connectorImplementations + report.filterImplementations
+                        def excludedArtifacts =  implementations.collect { impl -> "${impl.artifact.groupId}:${impl.artifact.artifactId}" }.unique()
+                        if(excludedArtifacts){
+                            def assembly = new XmlSlurper(false,false).parseText(assemblyFile.text)
+                            excludedArtifacts.each{ artifact ->
+                                assembly.dependencySets.dependencySet.excludes[0].appendNode{
+                                    log.info "Excluding $artifact from webapp classpath"
+                                    exclude(artifact)
+                                } 
+                            }
+                            assemblyFile.write(XmlUtil.serialize(assembly))
+                        }
                     }
                   ]]></script>
                 </scripts>
