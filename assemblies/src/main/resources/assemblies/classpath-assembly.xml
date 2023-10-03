@@ -9,7 +9,7 @@
     <!-- Avoid empty assembly error by including an empty folder -->
     <fileSets>
       <fileSet>
-          <directory>${project.basedir}/target</directory>
+          <directory>${project.build.directory}</directory>
           <outputDirectory>ignored-empty-folder</outputDirectory>
           <excludes>
               <exclude>*/**</exclude>
