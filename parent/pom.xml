@@ -625,9 +625,8 @@
         <docker.baseImage>${docker.baseImageRepository}:${docker.baseImageVersion}</docker.baseImage>
         <docker.imageRepository>${project.artifactId:lowercase}-${bonita.environment:lowercase}</docker.imageRepository>
         <docker.imageName>${docker.imageRepository}:${project.version}</docker.imageName>
-        <docker.noCache>true</docker.noCache>
         <docker.buildArgs></docker.buildArgs>
-        <docker.buildArgLine>build "." --build-arg ARTIFACT_FINAL_NAME=${project.build.finalName} --build-arg BONITA_ENVIRONMENT=${bonita.environment:lowercase} --build-arg BONITA_BASE_IMAGE="${docker.baseImage}" ${docker.buildArgs} --no-cache="${docker.noCache}" --tag "${docker.imageName}"</docker.buildArgLine>
+        <docker.buildArgLine>build "." --build-arg ARTIFACT_FINAL_NAME=${project.build.finalName} --build-arg BONITA_ENVIRONMENT=${bonita.environment:lowercase} --build-arg BONITA_BASE_IMAGE="${docker.baseImage}" ${docker.buildArgs} --tag "${docker.imageName}"</docker.buildArgLine>
       </properties>
       <build>
         <pluginManagement>
