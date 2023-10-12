@@ -13,18 +13,6 @@
     <maven.compiler.release>11</maven.compiler.release>
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
   </properties>
-  <dependencies>
-    <dependency>
-      <groupId>org.bonitasoft.engine</groupId>
-      <artifactId>bonita-application-model</artifactId>
-      <version>1.0.0-alpha-01</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.30</version>
-    </dependency>
-  </dependencies>
   <build>
     <pluginManagement>
       <plugins>
