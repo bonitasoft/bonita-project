@@ -24,11 +24,7 @@ pipeline {
                 }
             }
         }
-        // Weekly builds only deployed on Artifactory
         stage('Deploy to Artifactory') {
-            when{
-                expression { return env.BUILD_VERSION.contains('W')}
-            }
             steps {
                 configFileProvider([configFile(fileId: 'maven-settings', variable: 'MAVEN_SETTINGS')]) {
                     sh("./mvnw -s $MAVEN_SETTINGS --no-transfer-progress -B deploy -Dgpg.passphrase=\$GPG_PASSPHRASE -Prelease -DaltDeploymentRepository=${env.ALT_DEPLOYMENT_REPOSITORY_STAGING}")
