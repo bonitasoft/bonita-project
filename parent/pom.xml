@@ -495,7 +495,7 @@
                   <pluginExecutionFilter>
                     <groupId>org.codehaus.gmavenplus</groupId>
                     <artifactId>gmavenplus-plugin</artifactId>
-                    <versionRange>[${gmavenplus-plugin.version},)</versionRange>
+                    <versionRange>[3.0,)</versionRange>
                     <goals>
                       <goal>execute</goal>
                     </goals>
@@ -508,7 +508,7 @@
                   <pluginExecutionFilter>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <versionRange>[${build-helper-maven-plugin.version},)</versionRange>
+                    <versionRange>[3.0,)</versionRange>
                     <goals>
                       <goal>add-source</goal>
                     </goals>
