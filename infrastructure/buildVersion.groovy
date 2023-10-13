@@ -9,7 +9,7 @@ pipeline {
       JAVA_TOOL_OPTIONS = ''
       MAVEN_OPTS = '-Dstyle.color=always -Djansi.passthrough=true'
       GPG_PASSPHRASE = credentials('gpg-passphrase')
-      BUILD_VERSION = sh(script: "./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+      BUILD_VERSION = sh(script: "JAVA_HOME=${env.JAVA_HOME_11} ./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
       JAVA_HOME = "${env.JAVA_HOME_11}"
     }
     stages {
@@ -20,7 +20,7 @@ pipeline {
             }
             steps {
                 configFileProvider([configFile(fileId: 'maven-settings', variable: 'MAVEN_SETTINGS')]) {
-                    sh("./mvnw --no-transfer-progress -B deploy -Dgpg.passphrase=\$GPG_PASSPHRASE -Prelease,ossrh")
+                    sh("./mvnw -s $MAVEN_SETTINGS --no-transfer-progress -B deploy -Dgpg.passphrase=\$GPG_PASSPHRASE -Prelease,ossrh")
                 }
             }
         }
