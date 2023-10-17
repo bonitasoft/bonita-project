@@ -432,6 +432,7 @@
                     def assembliesFolder = new File(project.build.directory, 'assemblies')
                     assembliesFolder.mkdirs()
                     def assemblyFile = new File(assembliesFolder, 'classpath-assembly.xml')
+                    assemblyFile.delete()
                     assemblyFile.createNewFile()
                     def is = getClass().getResourceAsStream("/assemblies/${assemblyFile.name}")
                     assemblyFile.append(is)
