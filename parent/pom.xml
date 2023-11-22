@@ -33,7 +33,7 @@
     <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
     <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
     <maven-help-plugin.version>3.4.0</maven-help-plugin.version>
-    <versions-maven-plugin.version>2.16.1</versions-maven-plugin.version>
+    <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
     <!-- Should match version in bonita-runtime-bom -->
     <groovy.version>3.0.19</groovy.version>
     <!-- Bonita specific properties below -->
