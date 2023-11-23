@@ -52,6 +52,9 @@
     <include.applications>*</include.applications>
     <include.processes>*.bar</include.processes>
     <include.pages>*.zip</include.pages>
+    <groovy.repository.url>https://groovy.jfrog.io/artifactory/plugins-release/</groovy.repository.url>
+    <groovy-eclipse-batch.version>3.0.9-03</groovy-eclipse-batch.version>
+    <groovy-eclipse-compiler.version>3.9.0</groovy-eclipse-compiler.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -120,6 +123,18 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <pluginRepositories>
+    <pluginRepository>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>groovy</id>
+      <url>${groovy.repository.url}</url>
+    </pluginRepository>
+  </pluginRepositories>
   <build>
     <pluginManagement>
       <plugins>
@@ -134,6 +149,18 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.codehaus.groovy</groupId>
+              <artifactId>groovy-eclipse-compiler</artifactId>
+              <version>${groovy-eclipse-compiler.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.codehaus.groovy</groupId>
+              <artifactId>groovy-eclipse-batch</artifactId>
+              <version>${groovy-eclipse-batch.version}</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
