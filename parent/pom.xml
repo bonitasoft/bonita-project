@@ -126,7 +126,7 @@
   <pluginRepositories>
     <pluginRepository>
       <releases>
-        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
       </releases>
       <snapshots>
         <enabled>false</enabled>

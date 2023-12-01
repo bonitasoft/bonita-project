@@ -198,6 +198,7 @@
                 <url>expand</url>
                 <scm>expand</scm>
                 <developers>expand</developers>
+                <pluginRepositories>keep</pluginRepositories>
               </pomElements>
               <keepCommentsInPom>true</keepCommentsInPom>
             </configuration>
