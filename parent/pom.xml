@@ -138,6 +138,15 @@
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>${maven-clean-plugin.version}</version>
+          <configuration>
+            <filesets>
+              <fileset>
+                <directory>${project.basedir}/bin</directory>
+                <followSymlinks>false</followSymlinks>
+                <useDefaultExcludes>true</useDefaultExcludes>
+              </fileset>
+            </filesets>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
