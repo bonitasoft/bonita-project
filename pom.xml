@@ -194,6 +194,7 @@
               <flattenMode>resolveCiFriendliesOnly</flattenMode>
               <updatePomFile>true</updatePomFile>
               <pomElements>
+                <groupId>expand</groupId>
                 <parent>remove</parent>
                 <url>expand</url>
                 <scm>expand</scm>
