@@ -48,7 +48,7 @@
     <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
     <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
     <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
-    <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
+    <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
     <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
     <!-- Spotless resources location -->
     <eclipse.formatter.file>${maven.multiModuleProjectDirectory}/formatter.xml</eclipse.formatter.file>
@@ -194,6 +194,7 @@
               <flattenMode>resolveCiFriendliesOnly</flattenMode>
               <updatePomFile>true</updatePomFile>
               <pomElements>
+                <groupId>expand</groupId>
                 <parent>remove</parent>
                 <url>expand</url>
                 <scm>expand</scm>
