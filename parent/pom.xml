@@ -35,7 +35,7 @@
     <maven-help-plugin.version>3.4.0</maven-help-plugin.version>
     <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
     <!-- Should match version in bonita-runtime-bom -->
-    <groovy.version>3.0.19</groovy.version>
+    <groovy.version>3.0.21</groovy.version>
     <!-- Bonita specific properties below -->
     <bonita.environment>local</bonita.environment>
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
