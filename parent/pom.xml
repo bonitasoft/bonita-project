@@ -40,7 +40,7 @@
     <bonita.environment>local</bonita.environment>
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
     <bonita.runtime.version>10.1-SNAPSHOT</bonita.runtime.version>
-    <branding.version>2024.2-SNAPHOST</branding.version>
+    <branding.version>2024.2-SNAPSHOT</branding.version>
     <bonita-artifacts-model.version>1.0.0</bonita-artifacts-model.version>
     <ui-designer-artifact-builder.version>1.0.7</ui-designer-artifact-builder.version>
     <bonita-process-model.version>8.0.0</bonita-process-model.version>
