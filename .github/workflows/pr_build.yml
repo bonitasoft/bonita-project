@@ -1,0 +1,12 @@
+name: Pull request
+
+on:
+  pull_request:
+
+jobs:
+  call-build-workflow:
+    uses: ./.github/workflows/_reusable_build.yml
+    with:
+      ref: ${{ github.ref }}
+      publish: false
+    secrets: inherit
