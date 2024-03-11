@@ -30,7 +30,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 11
-      - uses: bonitasoft/maven-settings-action@main
+      - uses: bonitasoft/maven-settings-action@fix/ossrh_server
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
       - name: Build
