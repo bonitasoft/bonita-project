@@ -1,0 +1,29 @@
+name: Continuous Integration
+
+run-name: ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        type: string
+        description: 'The branch ref to build. Leave empty to use workflow branch.'
+  push:
+    branches:
+      - dev
+      - master
+      - release-*
+      - '[0-9]+.[0-9]+.x'
+    paths-ignore:
+      - '.github/**'
+      - '**/README.md'
+      - '!.github/workflows/build.yml'
+      - '!.github/workflows/_reusable_build.yml'
+
+jobs:
+  call-build-workflow:
+    uses: ./.github/workflows/_reusable_build.yml
+    with:
+      ref: ${{ github.event.inputs.ref || github.ref }}
+      publish:  ${{ (github.event.inputs.ref || github.ref) == 'dev' || (github.event.inputs.ref || github.ref) == 'master' || startsWith((github.event.inputs.ref || github.ref), 'release-') || endsWith((github.event.inputs.ref || github.ref), '.x') }}
+    secrets: inherit
