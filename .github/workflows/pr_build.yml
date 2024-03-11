@@ -1,0 +1,9 @@
+name: Pull request
+
+on:
+  pull_request:
+
+jobs:
+  call-build-workflow:
+    uses: ./.github/workflows/_reusable_build.yml
+    secrets: inherit
