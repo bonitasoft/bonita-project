@@ -3,15 +3,6 @@ name: Continuous Integration
 run-name: ${{ github.ref_name }}
 
 on:
-  workflow_dispatch:
-    inputs:
-      ref:
-        type: string
-        description: 'The branch ref to build. Leave empty to use workflow branch.'
-      publish:
-        type: boolean
-        default: true
-        description: 'Publish the built artifacts to Maven Central'
   push:
     branches:
       - dev
@@ -28,8 +19,7 @@ jobs:
   call-build-workflow:
     uses: ./.github/workflows/_reusable_build.yml
     with:
-      ref: ${{ github.event.inputs.ref || github.ref }}
-      # In case of push event, github.event.inputs.publish is null, and we want to publish the artifacts on these branches
-      # In case of workflow_dispatch, github.event.inputs.publish is specified by the launcher (usually true)
-      publish:  ${{ github.event.inputs.publish == null || github.event.inputs.publish == 'true' }}
+      ref: ${{ github.ref }}
+      publishToArtifactory: true
+      publishToCentral: true
     secrets: inherit
