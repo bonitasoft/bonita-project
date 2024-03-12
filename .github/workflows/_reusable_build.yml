@@ -1,0 +1,53 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        default: ${{ github.ref }}
+        description: 'The branch ref to build. Leave empty to use workflow branch.'
+      publish:
+        type: boolean
+        default: false
+        description: 'Publish the built artifacts to Maven Central'
+    secrets:
+      KSM_CONFIG:
+        required: true
+      BONITA_CI_PAT:
+        required: true
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          repository: bonitasoft/bonita-project
+          token: ${{ secrets.BONITA_CI_PAT }}
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 11
+      - uses: bonitasoft/maven-settings-action@fix/ossrh_server
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+      - name: Build
+        run: ./mvnw --no-transfer-progress -B verify -Ptests
+      - name: Publish Test Report
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            tests/**/target/*-reports/TEST-*.xml
+      - name: Upload IT logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: it-logs
+          path: tests/target/it/**/*.log
+          retention-days: 5
+      - name: Publish
+        if: ${{ inputs.publish }}
+        run: ./mvnw --no-transfer-progress -B deploy -Possrh
