@@ -30,6 +30,6 @@ jobs:
     with:
       ref: ${{ github.event.inputs.ref || github.ref }}
       # In case if push event, github.event.inputs.publish is null, and we want to publish the artifacts on these branches
-      # In case of workflow_dispatch, github.event.inputs.publish is specified bu the launcher (usually true)
+      # In case of workflow_dispatch, github.event.inputs.publish is specified by the launcher (usually true)
       publish:  ${{ github.event.inputs.publish == null || github.event.inputs.publish }}
     secrets: inherit
