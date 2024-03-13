@@ -4,6 +4,7 @@ on:
   pull_request:
 
 jobs:
-  call-build-workflow:
+  build-pr:
+    if: contains(fromJson(vars.SUPPORTED_BRANCHES).all-branches, github.head_ref) != true
     uses: ./.github/workflows/_reusable_build.yml
     secrets: inherit

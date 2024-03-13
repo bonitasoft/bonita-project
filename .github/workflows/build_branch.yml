@@ -1,0 +1,25 @@
+name: Continuous Integration
+
+run-name: ${{ github.ref_name }}
+
+on:
+  push:
+    branches:
+      - dev
+      - master
+      - release-*
+      - '[0-9]+.[0-9]+.x'
+    paths-ignore:
+      - '.github/**'
+      - '**/README.md'
+      - '!.github/workflows/build.yml'
+      - '!.github/workflows/_reusable_build.yml'
+
+jobs:
+  build-branch:
+    uses: ./.github/workflows/_reusable_build.yml
+    with:
+      ref: ${{ github.ref }}
+      publishToArtifactory: true
+      publishToCentral: true
+    secrets: inherit
