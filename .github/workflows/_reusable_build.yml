@@ -76,4 +76,4 @@ jobs:
         if: ${{ inputs.publishToCentral && !contains(steps.version.outputs.version,'W')}}
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: ./mvnw --no-transfer-progress -B deploy -Dgpg.keyname=${{ secrets.GPG_KEYNAME }} -Possrh
+        run: ./mvnw --no-transfer-progress -B deploy -Dgpg.keyname=${{ secrets.GPG_KEYNAME }} -Prelease,ossrh
