@@ -16,7 +16,7 @@ on:
       - '!.github/workflows/_reusable_build.yml'
 
 jobs:
-  call-build-workflow:
+  build-branch:
     uses: ./.github/workflows/_reusable_build.yml
     with:
       ref: ${{ github.ref }}
