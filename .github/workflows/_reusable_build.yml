@@ -24,6 +24,8 @@ on:
         required: true
       GPG_KEYNAME:
         required: true
+      GPG_PASSPHRASE:
+        required: true
       
 jobs:
   build:
@@ -66,9 +68,12 @@ jobs:
       - name: Publish ${{ steps.version.outputs.version }} to Artifactory
         if: ${{ inputs.publishToArtifactory }}
         env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           ALT_DEPLOYMENT_REPOSITORY: ${{ endsWith(steps.version.outputs.version,'-SNAPSHOT') && format('snapshots::{0}', vars.SNAPSHOTS_REPOSITORY_URL) || format('staging::{0}', vars.STAGING_REPOSITORY_URL) }}
         run: ./mvnw --no-transfer-progress -B deploy -Dgpg.keyname=${{ secrets.GPG_KEYNAME }} -Prelease -DaltDeploymentRepository=${{env.ALT_DEPLOYMENT_REPOSITORY}}
       - name: Publish ${{ steps.version.outputs.version }} to Central
         # Never publish a Weekly build to Maven Central
         if: ${{ inputs.publishToCentral && !contains(steps.version.outputs.version,'W')}}
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: ./mvnw --no-transfer-progress -B deploy -Dgpg.keyname=${{ secrets.GPG_KEYNAME }} -Possrh
