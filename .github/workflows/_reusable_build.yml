@@ -20,12 +20,6 @@ on:
         required: true
       BONITA_CI_PAT:
         required: true
-      GPG_PRIVATE_KEY:
-        required: true
-      GPG_KEYNAME:
-        required: true
-      GPG_PASSPHRASE:
-        required: true
       
 jobs:
   build:
