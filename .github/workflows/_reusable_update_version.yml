@@ -1,0 +1,46 @@
+name: Update Version
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        description: 'Bonita technical version (e.g. 10.1.0.beta-01)'
+        required: true    
+      brandingVersion:
+        type: string
+        description: 'Bonita branding version (e.g. 2024.2-b1)'
+        required: true
+    secrets:
+      KSM_CONFIG:
+        required: true
+      BONITA_CI_PAT:
+        required: true
+
+jobs:
+  update_version:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          repository: bonitasoft/bonita-project
+          token: ${{ secrets.BONITA_CI_PAT }}
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 11
+      - name: Git Setup
+        uses: bonitasoft/git-setup-action@v1
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+      - name: Update version
+        run: |
+          ./mvnw --no-transfer-progress -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${{ inputs.version }}
+          ./mvnw --no-transfer-progress -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${{ inputs.brandingVersion }}
+          ./mvnw --no-transfer-progress versions:set -DnewVersion=${{ inputs.version }}
+      - name: Commit and push changes
+        run: |
+          git commit -a -m "chore(versioning): update version to ${{ inputs.brandingVersion }} (${{ inputs.version }})"
+          git push
