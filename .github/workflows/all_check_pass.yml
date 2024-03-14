@@ -6,7 +6,7 @@ on:
 
 jobs:
   allchecks:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: wechuli/allcheckspassed@v1
         with:
