@@ -11,7 +11,7 @@ pipeline {
     environment {
         JAVA_TOOL_OPTIONS = ''
         MAVEN_OPTS = '-Dstyle.color=always -Djansi.passthrough=true'
-        JAVA_HOME = "${env.JAVA_HOME_11}"
+        JAVA_HOME = "${env.JAVA_HOME_17}"
     }
     stages {
         stage('Init') {
