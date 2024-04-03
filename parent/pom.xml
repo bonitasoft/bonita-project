@@ -42,7 +42,7 @@
     <bonita.runtime.version>10.0-SNAPSHOT</bonita.runtime.version>
     <branding.version>2024.1-SNAPSHOT</branding.version>
     <bonita-artifacts-model.version>1.0.0</bonita-artifacts-model.version>
-    <ui-designer-artifact-builder.version>1.0.8</ui-designer-artifact-builder.version>
+    <ui-designer-artifact-builder.version>1.0.9</ui-designer-artifact-builder.version>
     <bonita-process-model.version>8.0.0</bonita-process-model.version>
     <bonita-project-maven-plugin.version>1.0.0</bonita-project-maven-plugin.version>
     <bonita-test-toolkit.version>2.0.0</bonita-test-toolkit.version>
