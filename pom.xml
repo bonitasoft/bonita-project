@@ -40,11 +40,11 @@
     <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
     <maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
-    <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-    <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+    <maven-jar-plugin.version>3.4.0</maven-jar-plugin.version>
+    <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
     <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
     <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-    <maven-gpg-plugin.version>3.2.0</maven-gpg-plugin.version>
+    <maven-gpg-plugin.version>3.2.3</maven-gpg-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
     <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
     <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
@@ -54,7 +54,7 @@
     <eclipse.formatter.file>${maven.multiModuleProjectDirectory}/formatter.xml</eclipse.formatter.file>
     <header.file>${maven.multiModuleProjectDirectory}/header.txt</header.file>
     <!-- Test -->
-    <maven-invoker-plugin.version>3.6.0</maven-invoker-plugin.version>
+    <maven-invoker-plugin.version>3.6.1</maven-invoker-plugin.version>
   </properties>
   <build>
     <pluginManagement>
