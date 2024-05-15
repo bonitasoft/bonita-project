@@ -23,6 +23,10 @@ on:
       
 jobs:
   build:
+    # Allow dependabot to publish tests results
+    permissions:
+      checks: write
+      pull-requests: write
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -49,6 +53,7 @@ jobs:
         with:
           files: |
             tests/**/target/*-reports/TEST-*.xml
+
       - name: Upload IT logs
         uses: actions/upload-artifact@v4
         if: always()
