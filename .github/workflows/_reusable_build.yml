@@ -25,6 +25,8 @@ jobs:
   build:
     # Allow dependabot to publish tests results
     permissions:
+      contents: read
+      issues: read
       checks: write
       pull-requests: write
     runs-on: ubuntu-22.04
