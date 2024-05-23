@@ -43,9 +43,10 @@ jobs:
       - name: Update version
         run: |
           git checkout -B release/${{ inputs.version }}
-          ./mvnw --no-transfer-progress -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${{ inputs.version }}
-          ./mvnw --no-transfer-progress -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${{ inputs.brandingVersion }}
-          ./mvnw --no-transfer-progress versions:set -DnewVersion=${{ inputs.version }}
+          ./mvnw -ntp versions:set -DnewVersion=${{ inputs.version }} -Ptests
+          ./mvnw -ntp -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${{ inputs.brandingVersion }}
+          ./mvnw -ntp -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${{ inputs.version }}
+         
       - name: Create tag
         run: |
           git commit -a -m "chore(release): Release ${{ inputs.brandingVersion }} (${{ inputs.version }})"
