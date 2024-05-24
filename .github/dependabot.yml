@@ -30,3 +30,5 @@ updates:
         dependency-type: "production"
       development-dependencies:
         dependency-type: "development"
+    ignore:
+      - dependency-name: "*maven-install-plugin*"
