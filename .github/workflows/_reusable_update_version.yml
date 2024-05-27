@@ -41,9 +41,9 @@ jobs:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
       - name: Update version
         run: |
-          ./mvnw --no-transfer-progress -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${{ inputs.version }}
-          ./mvnw --no-transfer-progress -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${{ inputs.brandingVersion }}
-          ./mvnw --no-transfer-progress versions:set -DnewVersion=${{ inputs.version }}
+          ./mvnw -ntp versions:set -DnewVersion=${{ inputs.version }} -Ptests
+          ./mvnw -ntp -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${{ inputs.brandingVersion }}
+          ./mvnw -ntp -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${{ inputs.version }}
       - name: Commit and push changes
         run: |
           git commit -a -m "chore(versioning): update version to ${{ inputs.brandingVersion }} (${{ inputs.version }})"
