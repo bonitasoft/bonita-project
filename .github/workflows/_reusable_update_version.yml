@@ -11,6 +11,9 @@ on:
         type: string
         description: 'Bonita branding version (e.g. 2024.2-b1)'
         required: true
+      merge-upstream-ignoring-conflicts:
+        type: boolean
+        default: false
     secrets:
       KSM_CONFIG:
         required: true
@@ -18,7 +21,7 @@ on:
         required: true
 
 jobs:
-  update_version:
+  update-version:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -48,3 +51,11 @@ jobs:
         run: |
           git commit -a -m "chore(versioning): update version to ${{ inputs.brandingVersion }} (${{ inputs.version }})"
           git push
+
+  merge-upstream:
+    needs: update-version
+    if: ${{ inputs.merge-upstream-ignoring-conflicts }}
+    uses: bonitasoft/github-workflows/.github/workflows/_reusable_merge_upstream.yml@main
+    with:
+      ignore-conflicts: true
+    secrets: inherit
