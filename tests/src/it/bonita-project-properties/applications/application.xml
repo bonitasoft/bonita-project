@@ -25,7 +25,7 @@
             </applicationMenu>
         </applicationMenus>
     </application>
-    <advancedApplication token="advanced" version="1.0" profile="User" state="ACTIVATED">
+    <applicationLink token="appLink" version="1.0" profile="User" state="ACTIVATED">
         <displayName>My App</displayName>
-    </advancedApplication>
+    </applicationLink>
 </applications>
