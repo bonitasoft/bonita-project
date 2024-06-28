@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.bonitasoft</groupId>
     <artifactId>bonita-project-parent</artifactId>
-    <version>10.2-SNAPSHOT</version>
+    <version>10.3-SNAPSHOT</version>
   </parent>
   <artifactId>bonita-project</artifactId>
   <packaging>pom</packaging>
@@ -39,8 +39,8 @@
     <!-- Bonita specific properties below -->
     <bonita.environment>local</bonita.environment>
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
-    <bonita.runtime.version>10.2-SNAPSHOT</bonita.runtime.version>
-    <branding.version>2024.3-SNAPSHOT</branding.version>
+    <bonita.runtime.version>10.3-SNAPSHOT</bonita.runtime.version>
+    <branding.version>2025.1-SNAPSHOT</branding.version>
     <bonita-artifacts-model.version>1.1.1</bonita-artifacts-model.version>
     <ui-designer-artifact-builder.version>1.0.9</ui-designer-artifact-builder.version>
     <bonita-process-model.version>8.0.0</bonita-process-model.version>
