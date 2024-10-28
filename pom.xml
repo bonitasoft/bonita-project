@@ -38,7 +38,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
     <maven-clean-plugin.version>3.4.0</maven-clean-plugin.version>
-    <maven-dependency-plugin.version>3.8.0</maven-dependency-plugin.version>
+    <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
     <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
@@ -53,7 +53,7 @@
     <eclipse.formatter.file>${maven.multiModuleProjectDirectory}/formatter.xml</eclipse.formatter.file>
     <header.file>${maven.multiModuleProjectDirectory}/header.txt</header.file>
     <!-- Test -->
-    <maven-invoker-plugin.version>3.8.0</maven-invoker-plugin.version>
+    <maven-invoker-plugin.version>3.8.1</maven-invoker-plugin.version>
   </properties>
   <build>
     <pluginManagement>
