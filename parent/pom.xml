@@ -53,7 +53,7 @@
     <include.processes>*.bar</include.processes>
     <include.pages>*.zip</include.pages>
     <groovy.repository.url>https://groovy.jfrog.io/artifactory/plugins-release/</groovy.repository.url>
-    <groovy-eclipse-batch.version>3.0.21-02</groovy-eclipse-batch.version>
+    <groovy-eclipse-batch.version>3.0.23-02</groovy-eclipse-batch.version>
     <groovy-eclipse-compiler.version>3.9.0</groovy-eclipse-compiler.version>
   </properties>
   <dependencyManagement>
