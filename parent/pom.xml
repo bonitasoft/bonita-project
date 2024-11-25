@@ -41,7 +41,7 @@
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
     <bonita.runtime.version>10.2-SNAPSHOT</bonita.runtime.version>
     <branding.version>2024.3-SNAPSHOT</branding.version>
-    <bonita-artifacts-model.version>1.1.1</bonita-artifacts-model.version>
+    <bonita-artifacts-model.version>1.1.2</bonita-artifacts-model.version>
     <ui-designer-artifact-builder.version>1.0.10</ui-designer-artifact-builder.version>
     <bonita-process-model.version>8.0.0</bonita-process-model.version>
     <bonita-project-maven-plugin.version>1.0.0</bonita-project-maven-plugin.version>
