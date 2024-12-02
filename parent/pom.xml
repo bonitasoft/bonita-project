@@ -44,7 +44,7 @@
     <bonita-artifacts-model.version>1.0.1</bonita-artifacts-model.version>
     <ui-designer-artifact-builder.version>1.0.10</ui-designer-artifact-builder.version>
     <bonita-process-model.version>8.0.1</bonita-process-model.version>
-    <bonita-project-maven-plugin.version>1.0.1</bonita-project-maven-plugin.version>
+    <bonita-project-maven-plugin.version>1.0.2</bonita-project-maven-plugin.version>
     <bonita-test-toolkit.version>2.0.0</bonita-test-toolkit.version>
     <!-- Default inclusion filters -->
     <include.organizations>*.xml</include.organizations>
