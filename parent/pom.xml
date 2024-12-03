@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.bonitasoft</groupId>
     <artifactId>bonita-project-parent</artifactId>
-    <version>10.1-SNAPSHOT</version>
+    <version>10.2-SNAPSHOT</version>
   </parent>
   <artifactId>bonita-project</artifactId>
   <packaging>pom</packaging>
@@ -16,34 +16,34 @@
     <java.version>17</java.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
-    <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
-    <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
+    <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+    <maven-failsafe-plugin.version>3.3.0</maven-failsafe-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
-    <maven-shade-plugin.version>3.5.3</maven-shade-plugin.version>
+    <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
     <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-    <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
-    <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
+    <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
+    <maven-clean-plugin.version>3.4.0</maven-clean-plugin.version>
     <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
     <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
-    <maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>
-    <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
-    <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+    <maven-dependency-plugin.version>3.7.1</maven-dependency-plugin.version>
+    <maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
+    <maven-surefire-plugin.version>3.3.0</maven-surefire-plugin.version>
     <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
     <maven-deploy-plugin.version>3.1.2</maven-deploy-plugin.version>
-    <exec-maven-plugin.version>3.2.0</exec-maven-plugin.version>
+    <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
     <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
-    <maven-help-plugin.version>3.4.0</maven-help-plugin.version>
+    <maven-help-plugin.version>3.4.1</maven-help-plugin.version>
     <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
     <!-- Should match version in bonita-runtime-bom -->
     <groovy.version>3.0.21</groovy.version>
     <!-- Bonita specific properties below -->
     <bonita.environment>local</bonita.environment>
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
-    <bonita.runtime.version>10.1-SNAPSHOT</bonita.runtime.version>
-    <branding.version>2024.2-SNAPSHOT</branding.version>
-    <bonita-artifacts-model.version>1.0.1</bonita-artifacts-model.version>
+    <bonita.runtime.version>10.2-SNAPSHOT</bonita.runtime.version>
+    <branding.version>2024.3-SNAPSHOT</branding.version>
+    <bonita-artifacts-model.version>1.1.2</bonita-artifacts-model.version>
     <ui-designer-artifact-builder.version>1.0.10</ui-designer-artifact-builder.version>
-    <bonita-process-model.version>8.0.1</bonita-process-model.version>
+    <bonita-process-model.version>8.1.0</bonita-process-model.version>
     <bonita-project-maven-plugin.version>1.0.3</bonita-project-maven-plugin.version>
     <bonita-test-toolkit.version>3.0.0</bonita-test-toolkit.version>
     <!-- Default inclusion filters -->
@@ -53,7 +53,7 @@
     <include.processes>*.bar</include.processes>
     <include.pages>*.zip</include.pages>
     <groovy.repository.url>https://groovy.jfrog.io/artifactory/plugins-release/</groovy.repository.url>
-    <groovy-eclipse-batch.version>3.0.19-02</groovy-eclipse-batch.version>
+    <groovy-eclipse-batch.version>3.0.21-02</groovy-eclipse-batch.version>
     <groovy-eclipse-compiler.version>3.9.0</groovy-eclipse-compiler.version>
   </properties>
   <dependencyManagement>
