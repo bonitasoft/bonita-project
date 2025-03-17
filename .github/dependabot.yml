@@ -32,3 +32,5 @@ updates:
         dependency-type: "development"
     ignore:
       - dependency-name: "*maven-install-plugin*"
+      # temporary deactivation of the maven-assembly-plugin update, because of the following issue: issues.apache.org/jira/browse/MASSEMBLY-1031
+      - dependency-name: "*maven-assembly-plugin*"
