@@ -35,6 +35,7 @@
     <gmavenplus-plugin.version>4.0.1</gmavenplus-plugin.version>
     <maven-help-plugin.version>3.5.1</maven-help-plugin.version>
     <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
+    <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
     <!-- Should match version in bonita-runtime-bom -->
     <groovy.version>3.0.23</groovy.version>
     <!-- Bonita specific properties below -->
@@ -42,10 +43,10 @@
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
     <bonita.runtime.version>10.3-SNAPSHOT</bonita.runtime.version>
     <branding.version>2025.1-SNAPSHOT</branding.version>
-    <bonita-artifacts-model.version>1.1.3-SNAPSHOT</bonita-artifacts-model.version>
+    <bonita-artifacts-model.version>1.2.2</bonita-artifacts-model.version>
     <ui-designer-artifact-builder.version>1.0.10</ui-designer-artifact-builder.version>
-    <bonita-process-model.version>8.1.0</bonita-process-model.version>
-    <bonita-project-maven-plugin.version>1.1.0-SNAPSHOT</bonita-project-maven-plugin.version>
+    <bonita-process-model.version>9.0.2</bonita-process-model.version>
+    <bonita-project-maven-plugin.version>2.0.0</bonita-project-maven-plugin.version>
     <bonita-test-toolkit.version>3.0.0</bonita-test-toolkit.version>
     <!-- Default inclusion filters -->
     <include.organizations>*.xml</include.organizations>
@@ -475,23 +476,11 @@
                     assemblyFile.append(is)
                     is.close()
                     
-                    def dependencyReportFile = new File(project.build.directory, 'bonita-dependencies.json')
-                    if(dependencyReportFile.exists()){
-                        def report = new JsonSlurper().parse(dependencyReportFile)
-                        // Excluding Bonita connectors and actor filters artifacts
-                        def implementations = report.connectorImplementations + report.filterImplementations
-                        def excludedArtifacts =  implementations.collect { impl -> "${impl.artifact.groupId}:${impl.artifact.artifactId}" }.unique()
-                        if(excludedArtifacts){
-                            def assembly = new XmlSlurper(false,false).parseText(assemblyFile.text)
-                            excludedArtifacts.each{ artifact ->
-                                assembly.dependencySets.dependencySet.excludes[0].appendNode{
-                                    log.info "Excluding $artifact from webapp classpath"
-                                    exclude(artifact)
-                                } 
-                            }
-                            assemblyFile.write(XmlUtil.serialize(assembly))
-                        }
-                    }
+                    /*
+                     * We no longer exclude Bonita connectors and actor filters artifacts.
+                     * They used to be in the bar, but are not in the jarless bar.
+                     * So they are now directly included in the webapp classpath.
+                     */
                   ]]></script>
                 </scripts>
               </configuration>
@@ -565,6 +554,27 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <!-- Enforce Maven 3.9.6, the minimum maven version for Sisu injections to work with Java 17 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-enforcer-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.9.6</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <!-- Execute Bonita artifacts validation -->
       <plugin>
         <groupId>org.bonitasoft.maven</groupId>
@@ -604,6 +614,10 @@
     <!-- Profile used to package the app as a Bundle Tomcat -->
     <profile>
       <id>bundle</id>
+      <properties>
+        <!-- When building in SCA, we do not neet dependency jars, these will be inserted in webapp classpath -->
+        <bonita.includeDependencyJars>false</bonita.includeDependencyJars>
+      </properties>
       <build>
         <pluginManagement>
           <plugins>
