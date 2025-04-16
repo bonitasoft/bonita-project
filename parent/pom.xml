@@ -477,10 +477,31 @@
                     is.close()
                     
                     /*
-                     * We no longer exclude Bonita connectors and actor filters artifacts.
+                     * We no longer exclude Bonita connectors and actor filters artifacts
+                     * when bonita.includeDependencyJars=false.
                      * They used to be in the bar, but are not in the jarless bar.
                      * So they are now directly included in the webapp classpath.
                      */
+                    def barHasJars = properties.'bonita.includeDependencyJars'
+                    if(barHasJars){
+                        def dependencyReportFile = new File(project.build.directory, 'bonita-dependencies.json')
+                        if(dependencyReportFile.exists()){
+                            def report = new JsonSlurper().parse(dependencyReportFile)
+                            // Excluding Bonita connectors and actor filters artifacts
+                            def implementations = report.connectorImplementations + report.filterImplementations
+                            def excludedArtifacts =  implementations.collect { impl -> "${impl.artifact.groupId}:${impl.artifact.artifactId}" }.unique()
+                            if(excludedArtifacts){
+                                def assembly = new XmlSlurper(false,false).parseText(assemblyFile.text)
+                                excludedArtifacts.each{ artifact ->
+                                    assembly.dependencySets.dependencySet.excludes[0].appendNode{
+                                        log.info "Excluding $artifact from webapp classpath"
+                                        exclude(artifact)
+                                    } 
+                                }
+                                assemblyFile.write(XmlUtil.serialize(assembly))
+                            }
+                        }
+                    }
                   ]]></script>
                 </scripts>
               </configuration>
