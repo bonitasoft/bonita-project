@@ -482,7 +482,7 @@
                      * They used to be in the bar, but are not in the jarless bar.
                      * So they are now directly included in the webapp classpath.
                      */
-                    def barHasJars = properties.'bonita.includeDependencyJars'.toBoolean()
+                    def barHasJars = properties.'bonita.includeDependencyJars' == null || properties.'bonita.includeDependencyJars'.toBoolean()
                     if(barHasJars){
                         def dependencyReportFile = new File(project.build.directory, 'bonita-dependencies.json')
                         if(dependencyReportFile.exists()){
