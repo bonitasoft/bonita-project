@@ -5,11 +5,11 @@ on:
     inputs:
       version:
         type: string
-        description: 'Bonita technical version (e.g. 10.1.0.beta-01)'
-        required: true    
+        description: "Bonita technical version (e.g. 10.1.0.beta-01)"
+        required: true
       brandingVersion:
         type: string
-        description: 'Bonita branding version (e.g. 2024.2-b1)'
+        description: "Bonita branding version (e.g. 2024.2-b1)"
         required: true
       merge-upstream-ignoring-conflicts:
         type: boolean
@@ -22,31 +22,38 @@ on:
 
 jobs:
   update-version:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
           repository: bonitasoft/bonita-project
           token: ${{ secrets.BONITA_CI_PAT }}
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: 17
+          cache: maven
+
       - name: Setup Maven
         uses: bonitasoft/maven-settings-action@v1
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+
       - name: Git Setup
         uses: bonitasoft/git-setup-action@v1
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+
       - name: Update version
         run: |
           ./mvnw -ntp versions:set -DnewVersion=${{ inputs.version }} -Ptests
           ./mvnw -ntp -f parent versions:set-property -Dproperty=branding.version -DnewVersion=${{ inputs.brandingVersion }}
           ./mvnw -ntp -f parent versions:set-property -Dproperty=bonita.runtime.version -DnewVersion=${{ inputs.version }}
+
       - name: Commit and push changes
         run: |
           git commit -a -m "chore(versioning): update version to ${{ inputs.brandingVersion }} (${{ inputs.version }})"
@@ -55,7 +62,7 @@ jobs:
   merge-upstream:
     needs: update-version
     if: ${{ inputs.merge-upstream-ignoring-conflicts }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Setup git
         uses: bonitasoft/git-setup-action@v1
@@ -76,6 +83,6 @@ jobs:
 
       - name: Merge upstream branch
         run: |
-           git config merge.ours.driver true
-           git merge origin/${{ github.ref_name }} -X ours  -m "chore(merge): ${{ github.ref_name }} into ${{ steps.upstream-branch.outputs.ref }}"
-           git push
+          git config merge.ours.driver true
+          git merge origin/${{ github.ref_name }} -X ours  -m "chore(merge): ${{ github.ref_name }} into ${{ steps.upstream-branch.outputs.ref }}"
+          git push
