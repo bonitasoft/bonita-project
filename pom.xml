@@ -49,7 +49,7 @@
     <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
     <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
     <flatten-maven-plugin.version>1.7.1</flatten-maven-plugin.version>
-    <spotless-maven-plugin.version>2.44.5</spotless-maven-plugin.version>
+    <spotless-maven-plugin.version>2.45.0</spotless-maven-plugin.version>
     <!-- Spotless resources location -->
     <eclipse.formatter.file>${maven.multiModuleProjectDirectory}/formatter.xml</eclipse.formatter.file>
     <header.file>${maven.multiModuleProjectDirectory}/header.txt</header.file>
