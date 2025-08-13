@@ -25,7 +25,7 @@
     <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
     <!-- Only upgrade to a version fixing https://issues.apache.org/jira/browse/MASSEMBLY-1031 -->
     <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
-    <flatten-maven-plugin.version>1.7.1</flatten-maven-plugin.version>
+    <flatten-maven-plugin.version>1.7.2</flatten-maven-plugin.version>
     <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
     <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
     <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
