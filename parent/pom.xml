@@ -509,11 +509,9 @@
                     // Copy resources from the bonita-project-assemblies resources jar
                     def resourceList = ['Dockerfile']
                     resourceList.each { name ->
-                      def file = new File(dockerOutput, name)
-                      file.createNewFile()
-                      def is = getClass().getResourceAsStream("/docker/$name")
-                      file.append(is)
-                      is.close()
+                      getClass().getResourceAsStream("/docker/$name").withCloseable { input ->
+                         java.nio.file.Files.copy(input, new File(dockerOutput, name).toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+                      }
                     }
                   ]]></script>
                 </scripts>
