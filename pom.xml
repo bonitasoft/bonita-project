@@ -47,8 +47,8 @@
     <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
     <central-publishing-maven-plugin>0.8.0</central-publishing-maven-plugin>
     <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
-    <versions-maven-plugin.version>2.19.0</versions-maven-plugin.version>
-    <flatten-maven-plugin.version>1.7.2</flatten-maven-plugin.version>
+    <versions-maven-plugin.version>2.19.1</versions-maven-plugin.version>
+    <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
     <spotless-maven-plugin.version>2.46.1</spotless-maven-plugin.version>
     <!-- Spotless resources location -->
     <eclipse.formatter.file>${maven.multiModuleProjectDirectory}/formatter.xml</eclipse.formatter.file>
