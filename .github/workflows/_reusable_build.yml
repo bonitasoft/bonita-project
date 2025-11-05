@@ -60,7 +60,7 @@ jobs:
             tests/**/target/*-reports/TEST-*.xml
 
       - name: Upload IT logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: it-logs
