@@ -39,17 +39,17 @@
     <!-- Only upgrade to a version fixing https://issues.apache.org/jira/browse/MASSEMBLY-1031 -->
     <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
     <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
-    <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
+    <maven-dependency-plugin.version>3.9.0</maven-dependency-plugin.version>
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
     <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
     <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
     <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-    <central-publishing-maven-plugin>0.8.0</central-publishing-maven-plugin>
+    <central-publishing-maven-plugin>0.9.0</central-publishing-maven-plugin>
     <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
-    <versions-maven-plugin.version>2.19.0</versions-maven-plugin.version>
-    <flatten-maven-plugin.version>1.7.2</flatten-maven-plugin.version>
-    <spotless-maven-plugin.version>2.46.1</spotless-maven-plugin.version>
+    <versions-maven-plugin.version>2.19.1</versions-maven-plugin.version>
+    <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
+    <spotless-maven-plugin.version>3.0.0</spotless-maven-plugin.version>
     <!-- Spotless resources location -->
     <eclipse.formatter.file>${maven.multiModuleProjectDirectory}/formatter.xml</eclipse.formatter.file>
     <header.file>${maven.multiModuleProjectDirectory}/header.txt</header.file>
