@@ -47,7 +47,7 @@
     <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
     <central-publishing-maven-plugin>0.10.0</central-publishing-maven-plugin>
     <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
-    <versions-maven-plugin.version>2.20.1</versions-maven-plugin.version>
+    <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
     <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
     <spotless-maven-plugin.version>3.1.0</spotless-maven-plugin.version>
     <!-- Spotless resources location -->
