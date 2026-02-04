@@ -12,7 +12,7 @@ on:
     paths-ignore:
       - '.github/**'
       - '**/README.md'
-      - '!.github/workflows/build.yml'
+      - '!.github/workflows/build-branch.yml'
       - '!.github/workflows/_reusable_build.yml'
 
 jobs:
