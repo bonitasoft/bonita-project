@@ -39,7 +39,7 @@
     <!-- Only upgrade to a version fixing https://github.com/apache/maven-assembly-plugin/issues/1236 -->
     <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>
     <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
-    <maven-dependency-plugin.version>3.9.0</maven-dependency-plugin.version>
+    <maven-dependency-plugin.version>3.10.0</maven-dependency-plugin.version>
     <!-- The version of maven-install-plugin should follow the one of bonita-project-maven-plugin -->
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
     <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
