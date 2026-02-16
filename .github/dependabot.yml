@@ -4,33 +4,29 @@ updates:
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
-    target-branch: dev
     schedule:
       interval: "daily"
     commit-message:
       prefix: "chore"
       include: "scope"
-    groups:
-      production-dependencies:
-        dependency-type: "production"
-      development-dependencies:
-        dependency-type: "development"
 
   # Maintain dependencies for maven
   - package-ecosystem: "maven" 
     directory: "/" 
-    target-branch: dev
     schedule:
       interval: "daily"
     commit-message:
       prefix: "chore"
       include: "scope"
     groups:
-      production-dependencies:
-        dependency-type: "production"
-      development-dependencies:
-        dependency-type: "development"
+      bonitasoft-engine:
+        patterns:
+          - "org.bonitasof.engine:*"
+      bonitasoft-bpm:
+        patterns:
+          - "org.bonitasof.bpm:*"
     ignore:
+      # The version of maven-install-plugin should follow the one of bonita-project-maven-plugin
       - dependency-name: "*maven-install-plugin*"
-      # temporary deactivation of the maven-assembly-plugin update, because of the following issue: issues.apache.org/jira/browse/MASSEMBLY-1031
+      # Ignore maven-assembly-plugin updates until this issue is fixed: https://github.com/apache/maven-assembly-plugin/issues/1236
       - dependency-name: "*maven-assembly-plugin*"
