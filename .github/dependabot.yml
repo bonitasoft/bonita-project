@@ -21,10 +21,13 @@ updates:
     groups:
       bonitasoft-engine:
         patterns:
-          - "org.bonitasof.engine:*"
+          - "org.bonitasoft.engine:*"
       bonitasoft-bpm:
         patterns:
-          - "org.bonitasof.bpm:*"
+          - "org.bonitasoft.bpm:*"
+      maven-plugins:
+        patterns:
+          - "org.apache.maven.plugins:*"
     ignore:
       # The version of maven-install-plugin should follow the one of bonita-project-maven-plugin
       - dependency-name: "*maven-install-plugin*"
