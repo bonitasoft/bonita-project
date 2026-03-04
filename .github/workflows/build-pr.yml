@@ -4,9 +4,10 @@ on:
   pull_request:
     paths-ignore:
       - '.github/**'
-      - '**/README.md'
       - '!.github/workflows/build-pr.yml'
       - '!.github/workflows/_reusable_build.yml'
+      - '**/README.md'
+      - 'CLAUDE.md'
 
 jobs:
   build-pr:
