@@ -11,9 +11,10 @@ on:
       - '[0-9]+.[0-9]+.x'
     paths-ignore:
       - '.github/**'
-      - '**/README.md'
       - '!.github/workflows/build-branch.yml'
       - '!.github/workflows/_reusable_build.yml'
+      - '**/README.md'
+      - 'CLAUDE.md'
 
 jobs:
   build-branch:
