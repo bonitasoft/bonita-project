@@ -13,7 +13,7 @@ on:
 
 jobs:
   merge-upstream:
-    uses: bonitasoft/github-workflows/.github/workflows/_reusable_merge_upstream.yml@main
+    uses: bonitasoft/github-workflows/.github/workflows/_reusable_merge_upstream.yml@e56989fa572db79504e96006dabfbe917b1987ee # main
     with:
       # Ignore conflicts if the keyword [ignore-conflicts] is present in the commit message
       ignore-conflicts: ${{ contains(github.event.head_commit.message, '[ignore-conflicts]') }}
