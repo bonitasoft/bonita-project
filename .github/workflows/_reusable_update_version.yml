@@ -39,12 +39,12 @@ jobs:
           cache: maven
 
       - name: Setup Maven
-        uses: bonitasoft/maven-settings-action@3278c15e4023d52bc12da9d4e1a8b49a80b40559 # v1.4.0
+        uses: bonitasoft/maven-settings-action@v1
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
 
       - name: Git Setup
-        uses: bonitasoft/git-setup-action@9593cf641830d8eadee52875d064ab6903b8b149 # v1.1.0
+        uses: bonitasoft/git-setup-action@v1
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
 
