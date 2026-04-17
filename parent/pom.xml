@@ -17,7 +17,7 @@
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <!-- The version of maven-install-plugin should follow the one of bonita-project-maven-plugin -->
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
-    <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+    <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
     <maven-failsafe-plugin.version>3.5.5</maven-failsafe-plugin.version>
     <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
     <maven-shade-plugin.version>3.6.2</maven-shade-plugin.version>
