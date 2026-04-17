@@ -33,3 +33,6 @@ updates:
       - dependency-name: "*maven-install-plugin*"
       # Ignore maven-assembly-plugin updates until this issue is fixed: https://github.com/apache/maven-assembly-plugin/issues/1236
       - dependency-name: "*maven-assembly-plugin*"
+      # Skip maven-jar-plugin 3.5.x due to Guice incompatibility (BPA-427)
+      - dependency-name: "*maven-jar-plugin*"
+        versions: ["3.5.x"]
