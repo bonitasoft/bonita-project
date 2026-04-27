@@ -42,7 +42,7 @@
     <maven-dependency-plugin.version>3.10.0</maven-dependency-plugin.version>
     <!-- The version of maven-install-plugin should follow the one of bonita-project-maven-plugin -->
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
-    <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+    <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
     <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
     <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
     <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
@@ -55,7 +55,7 @@
     <eclipse.formatter.file>${maven.multiModuleProjectDirectory}/formatter.xml</eclipse.formatter.file>
     <header.file>${maven.multiModuleProjectDirectory}/header.txt</header.file>
     <!-- Test -->
-    <maven-invoker-plugin.version>3.9.1</maven-invoker-plugin.version>
+    <maven-invoker-plugin.version>3.10.0</maven-invoker-plugin.version>
   </properties>
   <build>
     <pluginManagement>
