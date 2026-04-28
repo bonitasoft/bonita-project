@@ -1,0 +1,103 @@
+name: Update bonita-process-model version
+
+on:
+  repository_dispatch:
+    types: [new-process-model-release]
+
+env:
+  release_version: ${{ github.event.client_payload.release }}
+  release_notes_url: ${{ github.event.client_payload.release_notes_url }}
+
+jobs:
+  discover:
+    runs-on: ubuntu-24.04
+    outputs:
+      branches: ${{ steps.find.outputs.branches }}
+    steps:
+      - name: Discover branches consuming same MAJOR.MINOR
+        id: find
+        env:
+          GH_TOKEN: ${{ secrets.BONITA_CI_PAT }}
+          RELEASE: ${{ env.release_version }}
+        run: |
+          if [[ "$RELEASE" == *-* || "$RELEASE" == *SNAPSHOT* ]]; then
+            echo "Pre-release ($RELEASE), skipping"
+            echo "branches=[]" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          major_minor=$(echo "$RELEASE" | cut -d. -f1-2)
+          echo "Looking for branches consuming ${major_minor}.x"
+          matching=()
+          branches=$(gh api "repos/${{ github.repository }}/branches" --paginate --jq '.[].name' \
+                     | grep -E '^(dev|develop|support/)' || true)
+          for branch in $branches; do
+            content=$(gh api "repos/${{ github.repository }}/contents/parent/pom.xml?ref=$branch" \
+                      --jq '.content' 2>/dev/null | base64 -d 2>/dev/null || true)
+            current=$(echo "$content" \
+                      | grep -oE '<bonita-process-model\.version>[^<]+' \
+                      | sed 's/.*>//' || true)
+            if [[ -n "$current" && "$current" =~ ^${major_minor}\. ]]; then
+              echo "Match: $branch (current: $current)"
+              matching+=("$branch")
+            fi
+          done
+          if [ ${#matching[@]} -eq 0 ]; then
+            echo "No matching branch"
+            echo "branches=[]" >> "$GITHUB_OUTPUT"
+          else
+            json=$(printf '%s\n' "${matching[@]}" | jq -R . | jq -sc .)
+            echo "branches=$json" >> "$GITHUB_OUTPUT"
+          fi
+
+  create-pr:
+    needs: discover
+    if: needs.discover.outputs.branches != '[]'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: ${{ fromJson(needs.discover.outputs.branches) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ matrix.branch }}
+          token: ${{ secrets.BONITA_CI_PAT }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Bump bonita-process-model.version
+        run: |
+          ./mvnw versions:set-property \
+            -DnewVersion=${{ env.release_version }} \
+            -Dproperty=bonita-process-model.version \
+            -pl parent \
+            -DgenerateBackupPoms=false
+
+      - name: Compute branch slug
+        id: slug
+        run: echo "value=$(echo '${{ matrix.branch }}' | tr '/' '-')" >> "$GITHUB_OUTPUT"
+
+      - uses: bonitasoft/git-setup-action@v1
+        id: git-setup
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.BONITA_CI_PAT }}
+          base: ${{ matrix.branch }}
+          author: ${{ steps.git-setup.outputs.name }} <${{ steps.git-setup.outputs.email }}>
+          committer: ${{ steps.git-setup.outputs.name }} <${{ steps.git-setup.outputs.email }}>
+          sign-commits: true
+          commit-message: "chore(deps): update bonita-process-model to ${{ env.release_version }}"
+          branch: "chore/update_process_model_${{ env.release_version }}_${{ steps.slug.outputs.value }}"
+          delete-branch: true
+          title: "chore(deps): update bonita-process-model to ${{ env.release_version }}"
+          body: |
+            Use the latest `bonita-process-model` version: ${{ env.release_notes_url }}
