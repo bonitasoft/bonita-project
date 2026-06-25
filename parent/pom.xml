@@ -96,6 +96,13 @@
         <type>zip</type>
       </dependency>
       <dependency>
+        <groupId>com.bonitasoft.web.application</groupId>
+        <artifactId>bonita-user-application-sp</artifactId>
+        <version>${bonita.runtime.version}</version>
+        <classifier>application</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
         <groupId>com.bonitasoft</groupId>
         <artifactId>bonita-test-toolkit</artifactId>
         <version>${bonita-test-toolkit.version}</version>
