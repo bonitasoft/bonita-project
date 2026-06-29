@@ -15,6 +15,10 @@ on:
         type: boolean
         default: false
         description: "Publish the built artifacts to Maven Central (ignored for Weekly builds)"
+      skipTests:
+        type: boolean
+        default: false
+        description: "Skip the tests execution"
     secrets:
       KSM_CONFIG:
         required: true
@@ -50,18 +54,19 @@ jobs:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
 
       - name: Build
+        if: ${{ !inputs.skipTests }}
         run: ./mvnw --no-transfer-progress -B verify -Ptests
 
       - name: Publish Test Report
         uses: EnricoMi/publish-unit-test-result-action@c950f6fb443cb5af20a377fd0dfaa78838901040 # v2.23.0
-        if: always()
+        if: always() && !inputs.skipTests
         with:
           files: |
             tests/**/target/*-reports/TEST-*.xml
 
       - name: Upload IT logs
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        if: always()
+        if: always() && !inputs.skipTests
         with:
           name: it-logs
           path: tests/target/it/**/*.log
