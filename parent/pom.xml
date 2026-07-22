@@ -497,7 +497,7 @@
                                     assembly.dependencySets.dependencySet.excludes[0].appendNode{
                                         log.info "Excluding $artifact from webapp classpath"
                                         exclude(artifact)
-                                    } 
+                                    }
                                 }
                                 assemblyFile.write(XmlUtil.serialize(assembly))
                             }
