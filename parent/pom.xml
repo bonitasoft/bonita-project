@@ -15,7 +15,8 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>17</java.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
-    <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
+    <!-- The version of maven-install-plugin should follow the one of bonita-project-maven-plugin -->
+    <maven-install-plugin.version>3.1.3</maven-install-plugin.version>
     <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
     <maven-failsafe-plugin.version>3.3.0</maven-failsafe-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
