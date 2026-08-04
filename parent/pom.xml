@@ -38,7 +38,7 @@
     <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
     <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
     <!-- Should match version in bonita-runtime-bom -->
-    <groovy.version>3.0.25</groovy.version>
+    <groovy.version>4.0.32</groovy.version>
     <!-- Bonita specific properties below -->
     <bonita.environment>local</bonita.environment>
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
@@ -56,7 +56,7 @@
     <include.processes>*.bar</include.processes>
     <include.pages>*.zip</include.pages>
     <groovy.repository.url>https://groovy.jfrog.io/artifactory/plugins-release/</groovy.repository.url>
-    <groovy-eclipse-batch.version>3.0.23-02</groovy-eclipse-batch.version>
+    <groovy-eclipse-batch.version>4.0.32-01</groovy-eclipse-batch.version>
     <groovy-eclipse-compiler.version>3.9.0</groovy-eclipse-compiler.version>
   </properties>
   <dependencyManagement>
@@ -69,7 +69,7 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.groovy</groupId>
+        <groupId>org.apache.groovy</groupId>
         <artifactId>groovy-all</artifactId>
         <version>${groovy.version}</version>
         <type>pom</type>
@@ -160,6 +160,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
           <dependencies>
+            <!-- the groovy-eclipse artifacts keep the org.codehaus.groovy groupId even for
+                 Groovy 4 (the groovy-eclipse project never moved to org.apache.groovy) -->
             <dependency>
               <groupId>org.codehaus.groovy</groupId>
               <artifactId>groovy-eclipse-compiler</artifactId>
@@ -389,19 +391,19 @@
           </configuration>
           <dependencies>
             <dependency>
-              <groupId>org.codehaus.groovy</groupId>
+              <groupId>org.apache.groovy</groupId>
               <artifactId>groovy-json</artifactId>
               <version>${groovy.version}</version>
               <scope>runtime</scope>
             </dependency>
             <dependency>
-              <groupId>org.codehaus.groovy</groupId>
+              <groupId>org.apache.groovy</groupId>
               <artifactId>groovy-xml</artifactId>
               <version>${groovy.version}</version>
               <scope>runtime</scope>
             </dependency>
             <dependency>
-              <groupId>org.codehaus.groovy</groupId>
+              <groupId>org.apache.groovy</groupId>
               <artifactId>groovy-ant</artifactId>
               <version>${groovy.version}</version>
               <scope>runtime</scope>
