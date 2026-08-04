@@ -38,7 +38,7 @@
     <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
     <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
     <!-- Should match version in bonita-runtime-bom -->
-    <groovy.version>3.0.25</groovy.version>
+    <groovy.version>4.0.32</groovy.version>
     <!-- Bonita specific properties below -->
     <bonita.environment>local</bonita.environment>
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
@@ -56,7 +56,10 @@
     <include.processes>*.bar</include.processes>
     <include.pages>*.zip</include.pages>
     <groovy.repository.url>https://groovy.jfrog.io/artifactory/plugins-release/</groovy.repository.url>
-    <groovy-eclipse-batch.version>3.0.23-02</groovy-eclipse-batch.version>
+    <!-- groovy-eclipse-batch embeds the Groovy compiler and must match the groovy.version line;
+         groovy-eclipse-compiler is the maven compiler ADAPTER - its version is independent of the
+         Groovy language line (the adapter is level-agnostic) -->
+    <groovy-eclipse-batch.version>4.0.32-01</groovy-eclipse-batch.version>
     <groovy-eclipse-compiler.version>3.9.0</groovy-eclipse-compiler.version>
   </properties>
   <dependencyManagement>
@@ -69,7 +72,7 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.groovy</groupId>
+        <groupId>org.apache.groovy</groupId>
         <artifactId>groovy-all</artifactId>
         <version>${groovy.version}</version>
         <type>pom</type>
@@ -160,6 +163,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
           <dependencies>
+            <!-- the groovy-eclipse artifacts keep the org.codehaus.groovy groupId even for
+                 Groovy 4 (the groovy-eclipse project never moved to org.apache.groovy) -->
             <dependency>
               <groupId>org.codehaus.groovy</groupId>
               <artifactId>groovy-eclipse-compiler</artifactId>
@@ -385,23 +390,22 @@
           <configuration>
             <bindAllProjectProperties>true</bindAllProjectProperties>
             <bindAllSessionUserProperties>true</bindAllSessionUserProperties>
-            <bindPropertiesToSeparateVariables>false</bindPropertiesToSeparateVariables>
           </configuration>
           <dependencies>
             <dependency>
-              <groupId>org.codehaus.groovy</groupId>
+              <groupId>org.apache.groovy</groupId>
               <artifactId>groovy-json</artifactId>
               <version>${groovy.version}</version>
               <scope>runtime</scope>
             </dependency>
             <dependency>
-              <groupId>org.codehaus.groovy</groupId>
+              <groupId>org.apache.groovy</groupId>
               <artifactId>groovy-xml</artifactId>
               <version>${groovy.version}</version>
               <scope>runtime</scope>
             </dependency>
             <dependency>
-              <groupId>org.codehaus.groovy</groupId>
+              <groupId>org.apache.groovy</groupId>
               <artifactId>groovy-ant</artifactId>
               <version>${groovy.version}</version>
               <scope>runtime</scope>
@@ -427,8 +431,8 @@
               <configuration>
                 <scripts>
                   <script><![CDATA[
-                    def project = properties.project
-                    def environment = properties.'bonita.environment'
+                    def project = binding.variables.project
+                    def environment = binding.variables.'bonita.environment'
                     lcBonitaEnv = environment == null ? 'local' : environment.toLowerCase()
                     project.properties.setProperty('bonita.environment:lowercase', lcBonitaEnv)
                     project.properties.setProperty('project.artifactId:lowercase', project.artifactId.toLowerCase())
@@ -443,7 +447,7 @@
               <configuration>
                 <scripts>
                   <script><![CDATA[
-                    def project = properties.project
+                    def project = binding.variables.project
                     def propsFile = new File(project.build.directory, 'application.properties')
                     propsFile.delete()
                     propsFile.getParentFile().mkdirs()
@@ -472,7 +476,7 @@
                     import org.slf4j.LoggerFactory                    
                     
                     def log = LoggerFactory.getLogger(getClass())
-                    def project = properties.project
+                    def project = binding.variables.project
                     
                     // Classpath assembly templating
                     def assembliesFolder = new File(project.build.directory, 'assemblies')
@@ -490,7 +494,7 @@
                      * They used to be in the bar, but are not in the jarless bar.
                      * So they are now directly included in the webapp classpath.
                      */
-                    def barHasJars = properties.'bonita.includeDependencyJars' == null || properties.'bonita.includeDependencyJars'.toBoolean()
+                    def barHasJars = binding.variables.'bonita.includeDependencyJars' == null || binding.variables.'bonita.includeDependencyJars'.toBoolean()
                     if(barHasJars){
                         def dependencyReportFile = new File(project.build.directory, 'bonita-dependencies.json')
                         if(dependencyReportFile.exists()){
@@ -521,7 +525,7 @@
               <configuration>
                 <scripts>
                   <script><![CDATA[
-                    def dockerOutput = new File(properties.project.build.directory)
+                    def dockerOutput = new File(binding.variables.project.build.directory)
                     dockerOutput.mkdirs()
 
                     // Copy resources from the bonita-project-assemblies resources jar
