@@ -56,6 +56,9 @@
     <include.processes>*.bar</include.processes>
     <include.pages>*.zip</include.pages>
     <groovy.repository.url>https://groovy.jfrog.io/artifactory/plugins-release/</groovy.repository.url>
+    <!-- groovy-eclipse-batch embeds the Groovy compiler and must match the groovy.version line;
+         groovy-eclipse-compiler is the maven compiler ADAPTER - its version is independent of the
+         Groovy language line (the adapter is level-agnostic) -->
     <groovy-eclipse-batch.version>4.0.32-01</groovy-eclipse-batch.version>
     <groovy-eclipse-compiler.version>3.9.0</groovy-eclipse-compiler.version>
   </properties>
