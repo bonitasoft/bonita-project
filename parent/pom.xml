@@ -387,7 +387,6 @@
           <configuration>
             <bindAllProjectProperties>true</bindAllProjectProperties>
             <bindAllSessionUserProperties>true</bindAllSessionUserProperties>
-            <bindPropertiesToSeparateVariables>false</bindPropertiesToSeparateVariables>
           </configuration>
           <dependencies>
             <dependency>
@@ -429,8 +428,8 @@
               <configuration>
                 <scripts>
                   <script><![CDATA[
-                    def project = properties.project
-                    def environment = properties.'bonita.environment'
+                    def project = binding.variables.project
+                    def environment = binding.variables.'bonita.environment'
                     lcBonitaEnv = environment == null ? 'local' : environment.toLowerCase()
                     project.properties.setProperty('bonita.environment:lowercase', lcBonitaEnv)
                     project.properties.setProperty('project.artifactId:lowercase', project.artifactId.toLowerCase())
@@ -445,7 +444,7 @@
               <configuration>
                 <scripts>
                   <script><![CDATA[
-                    def project = properties.project
+                    def project = binding.variables.project
                     def propsFile = new File(project.build.directory, 'application.properties')
                     propsFile.delete()
                     propsFile.getParentFile().mkdirs()
@@ -474,7 +473,7 @@
                     import org.slf4j.LoggerFactory                    
                     
                     def log = LoggerFactory.getLogger(getClass())
-                    def project = properties.project
+                    def project = binding.variables.project
                     
                     // Classpath assembly templating
                     def assembliesFolder = new File(project.build.directory, 'assemblies')
@@ -492,7 +491,7 @@
                      * They used to be in the bar, but are not in the jarless bar.
                      * So they are now directly included in the webapp classpath.
                      */
-                    def barHasJars = properties.'bonita.includeDependencyJars' == null || properties.'bonita.includeDependencyJars'.toBoolean()
+                    def barHasJars = binding.variables.'bonita.includeDependencyJars' == null || binding.variables.'bonita.includeDependencyJars'.toBoolean()
                     if(barHasJars){
                         def dependencyReportFile = new File(project.build.directory, 'bonita-dependencies.json')
                         if(dependencyReportFile.exists()){
@@ -523,7 +522,7 @@
               <configuration>
                 <scripts>
                   <script><![CDATA[
-                    def dockerOutput = new File(properties.project.build.directory)
+                    def dockerOutput = new File(binding.variables.project.build.directory)
                     dockerOutput.mkdirs()
 
                     // Copy resources from the bonita-project-assemblies resources jar
