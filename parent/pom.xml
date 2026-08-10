@@ -71,11 +71,15 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!-- imports the management of every org.apache.groovy module, so consumer projects can
+           declare groovy modules without a version (a plain managed groovy-all entry only pins
+           a literal groovy-all dependency and manages nothing else) -->
       <dependency>
         <groupId>org.apache.groovy</groupId>
-        <artifactId>groovy-all</artifactId>
+        <artifactId>groovy-bom</artifactId>
         <version>${groovy.version}</version>
         <type>pom</type>
+        <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.bonitasoft.web.application</groupId>
