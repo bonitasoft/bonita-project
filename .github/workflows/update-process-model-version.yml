@@ -47,6 +47,13 @@ jobs:
                       | sed 's/.*>//' || true)
             if [[ -n "$current" && "$current" =~ ^${major_minor}\. ]]; then
               echo "Lowest match: $branch (current: $current)"
+              # an event delivered again, or a release older than the branch: nothing to bump
+              if [[ "$(printf '%s\n' "$current" "$RELEASE" | sort -V | tail -n1)" != "$RELEASE" \
+                    || "$current" == "$RELEASE" ]]; then
+                echo "$branch already uses $current, not older than $RELEASE: skipping"
+                echo "branches=[]" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
               lowest="$branch"
               break
             fi
