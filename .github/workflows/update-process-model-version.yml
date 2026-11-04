@@ -1,0 +1,110 @@
+name: Update bonita-process-model version
+
+on:
+  repository_dispatch:
+    types: [new-process-model-release]
+
+env:
+  release_version: ${{ github.event.client_payload.release }}
+  release_notes_url: ${{ github.event.client_payload.release_notes_url }}
+
+jobs:
+  discover:
+    runs-on: ubuntu-24.04
+    outputs:
+      branches: ${{ steps.find.outputs.branches }}
+    steps:
+      - name: Discover the lowest branch consuming the same MAJOR.MINOR
+        id: find
+        env:
+          GH_TOKEN: ${{ secrets.BONITA_CI_PAT }}
+          RELEASE: ${{ env.release_version }}
+        run: |
+          if [[ "$RELEASE" == *-* || "$RELEASE" == *SNAPSHOT* ]]; then
+            echo "Pre-release ($RELEASE), skipping"
+            echo "branches=[]" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          major_minor=$(echo "$RELEASE" | cut -d. -f1-2)
+          echo "Looking for the lowest branch consuming ${major_minor}.x"
+          # one PR on the lowest branch consuming the line: merge_upstream carries the bump to the upper ones.
+          # Maintenance branches oldest first, then master and dev, the order merge_upstream follows
+          all=$(gh api "repos/${{ github.repository }}/branches" --paginate --jq '.[].name')
+          candidates=$( (echo "$all" | grep -E '^[0-9]+\.[0-9]+\.x$' || true) | sort -V)
+          for upper in master dev; do
+            if echo "$all" | grep -qx "$upper"; then
+              candidates="$candidates $upper"
+            fi
+          done
+          lowest=""
+          for branch in $candidates; do
+            content=$(gh api "repos/${{ github.repository }}/contents/parent/pom.xml?ref=$branch" \
+                      --jq '.content' 2>/dev/null | base64 -d 2>/dev/null || true)
+            current=$(echo "$content" \
+                      | grep -oE '<bonita-process-model\.version>[^<]+' \
+                      | sed 's/.*>//' || true)
+            if [[ -n "$current" && "$current" =~ ^${major_minor}\. ]]; then
+              echo "Lowest match: $branch (current: $current)"
+              lowest="$branch"
+              break
+            fi
+          done
+          if [ -z "$lowest" ]; then
+            echo "No matching branch"
+            echo "branches=[]" >> "$GITHUB_OUTPUT"
+          else
+            echo "branches=[\"$lowest\"]" >> "$GITHUB_OUTPUT"
+          fi
+
+  create-pr:
+    needs: discover
+    if: needs.discover.outputs.branches != '[]'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: ${{ fromJson(needs.discover.outputs.branches) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ matrix.branch }}
+          token: ${{ secrets.BONITA_CI_PAT }}
+
+      - name: Setup Java
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Bump bonita-process-model.version
+        run: |
+          ./mvnw versions:set-property \
+            -DnewVersion=${{ env.release_version }} \
+            -Dproperty=bonita-process-model.version \
+            -pl parent \
+            -DgenerateBackupPoms=false
+
+      - name: Compute branch slug
+        id: slug
+        run: echo "value=$(echo '${{ matrix.branch }}' | tr '/' '-')" >> "$GITHUB_OUTPUT"
+
+      - uses: bonitasoft/git-setup-action@v1
+        id: git-setup
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.BONITA_CI_PAT }}
+          base: ${{ matrix.branch }}
+          author: ${{ steps.git-setup.outputs.name }} <${{ steps.git-setup.outputs.email }}>
+          committer: ${{ steps.git-setup.outputs.name }} <${{ steps.git-setup.outputs.email }}>
+          sign-commits: true
+          commit-message: "chore(deps): update bonita-process-model to ${{ env.release_version }}"
+          branch: "chore/update_process_model_${{ env.release_version }}_${{ steps.slug.outputs.value }}"
+          delete-branch: true
+          title: "chore(deps): update bonita-process-model to ${{ env.release_version }}"
+          body: |
+            Use the latest `bonita-process-model` version: ${{ env.release_notes_url }}
