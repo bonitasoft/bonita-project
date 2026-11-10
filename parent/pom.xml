@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.bonitasoft</groupId>
     <artifactId>bonita-project-parent</artifactId>
-    <version>10.3-SNAPSHOT</version>
+    <version>10.4-SNAPSHOT</version>
   </parent>
   <artifactId>bonita-project</artifactId>
   <packaging>pom</packaging>
@@ -35,15 +35,15 @@
     <exec-maven-plugin.version>3.5.1</exec-maven-plugin.version>
     <gmavenplus-plugin.version>4.2.1</gmavenplus-plugin.version>
     <maven-help-plugin.version>3.5.1</maven-help-plugin.version>
-    <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
+    <versions-maven-plugin.version>2.19.0</versions-maven-plugin.version>
     <maven-enforcer-plugin.version>3.6.1</maven-enforcer-plugin.version>
     <!-- Should match version in bonita-runtime-bom -->
     <groovy.version>3.0.25</groovy.version>
     <!-- Bonita specific properties below -->
     <bonita.environment>local</bonita.environment>
     <!-- DO NOT USE ${project.version} or ${project.parent.version} here -->
-    <bonita.runtime.version>10.3-SNAPSHOT</bonita.runtime.version>
-    <branding.version>2025.1-SNAPSHOT</branding.version>
+    <bonita.runtime.version>10.4-SNAPSHOT</bonita.runtime.version>
+    <branding.version>2025.2-SNAPSHOT</branding.version>
     <bonita-artifacts-model.version>1.2.3</bonita-artifacts-model.version>
     <ui-designer-artifact-builder.version>1.0.10</ui-designer-artifact-builder.version>
     <bonita-process-model.version>9.0.10</bonita-process-model.version>
