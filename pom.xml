@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bonitasoft</groupId>
   <artifactId>bonita-project-parent</artifactId>
-  <version>11.1-SNAPSHOT</version>
+  <version>11.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Bonita Project Aggregator</name>
   <description>This module is the aggregator module</description>
@@ -46,11 +46,11 @@
     <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
     <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
     <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-    <central-publishing-maven-plugin>0.10.0</central-publishing-maven-plugin>
-    <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
+    <central-publishing-maven-plugin>0.11.0</central-publishing-maven-plugin>
+    <maven-deploy-plugin.version>3.2.0</maven-deploy-plugin.version>
     <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
     <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
-    <spotless-maven-plugin.version>3.6.0</spotless-maven-plugin.version>
+    <spotless-maven-plugin.version>3.10.2</spotless-maven-plugin.version>
     <!-- Spotless resources location -->
     <eclipse.formatter.file>${maven.multiModuleProjectDirectory}/formatter.xml</eclipse.formatter.file>
     <header.file>${maven.multiModuleProjectDirectory}/header.txt</header.file>
